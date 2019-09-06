@@ -6,8 +6,6 @@ import os
 import sys
 import getopt
 import uuid
-import inspect
-import pprint
 import json
 import shutil
 
@@ -33,7 +31,6 @@ class Post:
 
     def __str__(self):
         return json.dumps(self.to_json(), sort_keys = True, indent = 4)
-        # return pprint.pformat(self.__dict__)
 
     def to_json(self):
         return {
@@ -70,7 +67,7 @@ class PostAction:
         image_file_extension = os.path.splitext(image_path)[1]
         image = str(uuid.uuid4()) + image_file_extension
 
-        date = datetime.now().strftime("%b %-d %Y")
+        date = datetime.now().strftime("(%b %-d %Y)")
 
         self.image_path = image_path
         self.post = Post(image = image, caption = caption, date = date)
