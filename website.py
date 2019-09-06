@@ -51,13 +51,19 @@ class Post:
         )
 
     def to_html(self):
-        return f"""
+        if not self.caption:
+            return f"""
+    <div class="post">
+        <img src="../images/{self.image}">
+        <p class="date">{self.date}</p>
+    </div>"""
+        else:
+            return f"""
     <div class="post">
         <img src="../images/{self.image}">
         <p class="caption">{self.caption}</p>
         <p class="date">{self.date}</p>
     </div>"""
-
 
 class PostAction:
     def __init__(self, image_path, caption):
