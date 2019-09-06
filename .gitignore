@@ -1,0 +1,8 @@
+#
+# .gitignore
+#
+
+views/*
+images/*
+icons/*
+logs/*

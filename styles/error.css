@@ -1,0 +1,17 @@
+/*
+  General Error Message Styling
+*/
+body {
+  font-family: "Verdana", Geneva, sans-serif;
+  font-size: 100px;
+  color: #333333;
+  text-align: center;
+}
+
+.centered {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

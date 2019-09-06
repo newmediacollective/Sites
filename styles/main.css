@@ -1,0 +1,83 @@
+/*
+  Body Styling
+*/
+body {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
+  Title Styling
+*/
+h2 {
+  font-family: "Arial", Helvetica, sans-serif;
+  color: #333333;
+  text-align: center;
+}
+
+/*
+  Post Styling
+*/
+@media screen and (min-width: 980px) /* Desktop */ {
+  .post {
+    width: 40%;
+  }
+}
+
+@media screen  and (max-width: 979px) /* Tablet */ {
+  .post {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 500px) /* Mobile */ {
+  .post {
+    width: 80%;
+  }
+}
+
+.post {
+  height: auto;
+  margin-top: 40px;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+  Image Styling
+*/
+.post img {
+  max-width: 100%;
+  /*box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4);*/
+}
+
+/*
+  Caption Styling
+*/
+.post .caption {
+  font-family: "Arial", Helvetica, sans-serif;
+  color: #333333;
+  font-size: medium;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
+  Date Styling
+*/
+.post .date {
+  font-family: "Courier New", Courier, monospace;
+  color: #333333;
+  font-size: small;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 0;
+  margin-right: 0;
+}
