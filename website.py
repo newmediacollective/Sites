@@ -70,6 +70,9 @@ class PostAction:
         self.post = Post(image = image, caption = caption, date = date)
 
     def execute(self):
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
+
         shutil.copy(self.image_path, join(image_dir, self.post.image))
 
         posts = get_posts()
@@ -89,6 +92,9 @@ class PublishAction:
 
     def execute(self):
         print("Publishing locally...")
+
+        if not os.path.exists(view_dir):
+            os.makedirs(view_dir)
 
         properties = get_properties()
         title = properties["title"]
@@ -149,29 +155,33 @@ def get_posts():
 def parse_args(argv):
     usage = "python3 website.py (post -i image_path -c? caption | publish -r?)"
 
+    if len(argv) == 0:
+        print(usage)
+        sys.exit(2)
+
     action_name = argv[0]
     image_path = None
     caption = ""
     remote = False
 
     try:
-        opts, args = getopt.getopt(argv[1:],"hri:c:")
+        opts, args = getopt.getopt(argv[1:],"ri:c:")
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
 
     for opt, arg in opts:
-        if opt == "-h":
-            print(usage)
-            sys.exit()
-        elif opt == "-r":
+        if opt == "-r":
             remote = True
         elif opt == "-i":
             image_path = arg
         elif opt == "-c":
             caption = arg
 
-    if action_name == "post":
+    if action_name == "help":
+        print(usage)
+        sys.exit()
+    elif action_name == "post":
         if not image_path:
             print("Error: missing image file path")
             print(f"Usage: {usage}")
