@@ -39,7 +39,7 @@ python3 website.py help
 ### Posting
 To create a new post, pass a path to an image along with an optional caption like so:
 ```
-python3 website.py post -i ~/path/to/image.jpg -c Check out my awesome image!
+python3 website.py post -i ~/path/to/image.jpg -c "I just posted something"
 ```
 
 This will:
