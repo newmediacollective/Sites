@@ -63,11 +63,12 @@ class Post:
     </div>"""
 
 class PostAction:
-    def __init__(self, image_path, caption):
+    def __init__(self, image_path, date, caption):
         image_file_extension = os.path.splitext(image_path)[1]
         image = str(uuid.uuid4()) + image_file_extension
 
-        date = datetime.now().strftime("(%b %-d %Y)")
+        if not date:
+            date = datetime.now().strftime("(%b %-d %Y)")
 
         self.image_path = image_path
         self.post = Post(image = image, caption = caption, date = date)
@@ -156,7 +157,7 @@ def get_posts():
 
 
 def parse_args(argv):
-    usage = "python3 website.py (post -i image_path -c? caption | publish -r?)"
+    usage = "python3 website.py (post -i image_path -d? date -c? caption | publish -r?)"
 
     if len(argv) == 0:
         print(usage)
@@ -164,11 +165,12 @@ def parse_args(argv):
 
     action_name = argv[0]
     image_path = None
+    date = ""
     caption = ""
     remote = False
 
     try:
-        opts, args = getopt.getopt(argv[1:],"ri:c:")
+        opts, args = getopt.getopt(argv[1:],"i:d:c:r")
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -178,6 +180,8 @@ def parse_args(argv):
             remote = True
         elif opt == "-i":
             image_path = arg
+        elif opt == "-d":
+            date = f"({arg})"
         elif opt == "-c":
             caption = arg
 
@@ -190,7 +194,7 @@ def parse_args(argv):
             print(f"Usage: {usage}")
             sys.exit(2)
 
-        action = PostAction(image_path = image_path, caption = caption)
+        action = PostAction(image_path = image_path, date = date, caption = caption)
     elif action_name == "publish":
         action = PublishAction(remote = remote)
     else:

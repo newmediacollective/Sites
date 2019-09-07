@@ -2,9 +2,9 @@
   General Error Message Styling
 */
 body {
-  font-family: "Verdana", Geneva, sans-serif;
+  font-family: "menlo", "andale mono", "courier new", sans-serif;
   font-size: 100px;
-  color: #333333;
+  color: #595959;
   text-align: center;
 }
 
