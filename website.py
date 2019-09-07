@@ -17,7 +17,6 @@ config_dir = "config"
 template_dir = "templates"
 view_dir = "views"
 image_dir = "images"
-icon_dir = "icons"
 
 properties_filename = "properties.json"
 posts_filename = "posts.json"
@@ -75,9 +74,6 @@ class PostAction:
         self.post = Post(image = image, caption = caption, date = date)
 
     def execute(self):
-        if not os.path.exists(image_dir):
-            os.makedirs(image_dir)
-
         shutil.copy(self.image_path, join(image_dir, self.post.image))
 
         posts = get_posts()
@@ -97,9 +93,6 @@ class PublishAction:
 
     def execute(self):
         print("Publishing locally...")
-
-        if not os.path.exists(view_dir):
-            os.makedirs(view_dir)
 
         properties = get_properties()
         title = properties["title"]
@@ -135,9 +128,6 @@ class PublishAction:
 
         with open(join(config_dir, server_filename), "r") as server_file:
             server = server_file.readline().strip()
-
-        if not os.path.exists(icon_dir):
-            os.makedirs(icon_dir)
 
         os.system(f"rsync -rvh views styles images icons root@{server}:/website")
 
