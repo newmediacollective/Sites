@@ -17,6 +17,7 @@ config_dir = "config"
 template_dir = "templates"
 view_dir = "views"
 image_dir = "images"
+icon_dir = "icons"
 
 properties_filename = "properties.json"
 posts_filename = "posts.json"
@@ -134,6 +135,9 @@ class PublishAction:
 
         with open(join(config_dir, server_filename), "r") as server_file:
             server = server_file.readline().strip()
+
+        if not os.path.exists(icon_dir):
+            os.makedirs(icon_dir)
 
         os.system(f"rsync -rvh views styles images icons root@{server}:/website")
 
