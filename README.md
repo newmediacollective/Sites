@@ -28,6 +28,30 @@ This will:
 - Copy over the default nginx config
 - Start nginx to serve your website
 
+### Set up https (optional, but like so easy)
+We can use letsencrypt and certbot for dead simple https support.
+
+Update `config/nginx.conf` for your domain name:
+```
+server_name  your_domain_here.com;
+```
+
+Then run the server prep script again:
+```
+./scripts/prepare-server.sh
+```
+
+Finally, we'll let certbot do the rest (when prompted, make sure to use the same domain you entered for `server_name` above):
+```
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python-certbot-nginx
+sudo certbot --nginx
+```
+
 ## Usage
 Use the following commands and helper scripts to update and monitor your website:
 
@@ -46,6 +70,11 @@ This will:
 - Create a unique ID for the image
 - Copy it to the `/images` directory
 - Create a new post in `posts.json`
+
+You can also provide an optional date with `-d` if you want to (it'll be passed through as a string so make sure it looks nice):
+```
+python3 website.py post -i ~/path/to/image.jpg -d "Apr 14 2020" -c "This didn't happen today"
+```
 
 ### Publishing
 To publish your changes:
