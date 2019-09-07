@@ -52,6 +52,25 @@ sudo apt-get install certbot python-certbot-nginx
 sudo certbot --nginx
 ```
 
+### Set up icons (optional, but also like so easy)
+If you create an `/icons` directory fill in the following files, we can serve favicons and apple-touch icons:
+```
+apple-touch-icon-114x114-precomposed.png
+apple-touch-icon-114x114.png
+apple-touch-icon-72x72-precomposed.png
+apple-touch-icon-72x72.png
+apple-touch-icon-precomposed.png
+apple-touch-icon.png
+favicon.ico
+```
+
+- All sizes are included in the filename, except:
+  - `favicon.ico`: 64x64
+  - `apple-touch-icon-precomposed.png`: 114x114
+  - `apple-touch-icon.png`: 114x114
+
+The `-precomposed` files are for Android devices, but they can be the exact same image file as their non-`precomposed` version.
+
 ## Usage
 Use the following commands and helper scripts to update and monitor your website:
 
