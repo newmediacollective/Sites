@@ -13,11 +13,11 @@ body {
   Title Styling
 */
 .title {
-  font-size: 16px;
+  font-size: medium;
   color: #595959;
   text-align: center;
-  margin-top: 60px;
-  margin-bottom: 40px;
+  margin-top: 40pt;
+  margin-bottom: 30pt;
   margin-left: 0;
   margin-right: 0;
 }
@@ -29,14 +29,14 @@ body {
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .post {
-    width: 90%;
+    width: 80%;
   }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
   .post {
-    width: 90%;
+    width: 80%;
   }
 }
 
@@ -63,7 +63,7 @@ body {
 
 .post {
   margin-top: 0;
-  margin-bottom: 60px;
+  margin-bottom: 45pt;
   margin-left: auto;
   margin-right: auto;
 }
@@ -73,10 +73,10 @@ body {
 */
 .post img {
   display: block;
-  max-height: 500px;
+  max-height: 380pt;
   max-width: 100%;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 15pt;
   margin-left: auto;
   margin-right: auto;
 }
@@ -85,11 +85,11 @@ body {
   Caption Styling
 */
 .post .caption {
-  font-size: 12px;
+  font-size: small;
   color: #595959;
   text-align: center;
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 5pt;
   margin-left: 0;
   margin-right: 0;
 }
@@ -98,7 +98,7 @@ body {
   Date Styling
 */
 .post .date {
-  font-size: 12px;
+  font-size: small;
   color: #999999;
   text-align: center;
   margin-top: 0;
