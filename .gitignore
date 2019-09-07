@@ -2,11 +2,5 @@
 # .gitignore
 #
 
-views/*
-images/*
-icons/*
-logs/*
-config/*
-
 posts.json
 properties.json
