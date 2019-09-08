@@ -22,7 +22,7 @@ fi
 
 echo "\n---"
 echo "Website host configured as: $server"
-echo "open $config_dir to update"
+echo "> open $config_dir to update"
 
 
 # Configure remote
