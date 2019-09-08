@@ -12,15 +12,28 @@ import shutil
 from os import listdir
 from os.path import join
 from datetime import datetime
+from subprocess import Popen, PIPE
 
-config_dir = "config"
-template_dir = "templates"
-view_dir = "views"
-image_dir = "images"
+def log(message):
+    print(f"\n---\n{message}")
 
-properties_filename = "properties.json"
-posts_filename = "posts.json"
-server_filename = "server.txt"
+def source(script):
+    pipe = Popen(f"set -a; . {script}; set +a; env", stdout = PIPE, shell = True)
+    output = pipe.communicate()[0]
+
+    lines = map(lambda line: line.decode("utf-8"), output.splitlines())
+    env = dict((line.split("=", 1) for line in lines))
+
+    return env
+
+env = source("scripts/locations.sh")
+
+template_dir = env["template_dir"]
+view_dir = env["view_dir"]
+image_dir = env["image_dir"]
+
+properties_filename = env["properties_file"]
+posts_filename = env["posts_file"]
 index_filename = "index.html"
 
 class Post:
@@ -84,7 +97,7 @@ class PostAction:
         with open(posts_filename, "w") as posts_file:
             json.dump(post_json, posts_file, sort_keys = True, indent = 4)
 
-        print(f"Successfully created post: \n{self.post}")
+        log(f"Successfully created post: \n{self.post}")
 
 
 class PublishAction:
@@ -92,7 +105,7 @@ class PublishAction:
         self.remote = remote
 
     def execute(self):
-        print("Publishing locally...")
+        log("Publishing locally...")
 
         properties = get_properties()
         title = properties["title"]
@@ -121,15 +134,8 @@ class PublishAction:
         with open(join(view_dir, index_filename), "w") as index_file:
             index_file.write(index)
 
-        if not self.remote:
-            return
-
-        print("\nPublishing remotely...")
-
-        with open(join(config_dir, server_filename), "r") as server_file:
-            server = server_file.readline().strip()
-
-        os.system(f"rsync -rvh views styles images icons root@{server}:/website")
+        if self.remote:
+            os.system(f"./scripts/publish.sh")
 
 
 def get_properties():
@@ -151,10 +157,10 @@ def get_posts():
 
 
 def parse_args(argv):
-    usage = "python3 website.py (post -i image_path -d? date -c? caption | publish -r?)"
+    usage = "Usage: python3 website.py (post -i image_path -d? date -c? caption | publish -r?)"
 
     if len(argv) == 0:
-        print(usage)
+        log(usage)
         sys.exit(2)
 
     action_name = argv[0]
@@ -166,7 +172,7 @@ def parse_args(argv):
     try:
         opts, args = getopt.getopt(argv[1:],"i:d:c:r")
     except getopt.GetoptError:
-        print(usage)
+        log(usage)
         sys.exit(2)
 
     for opt, arg in opts:
@@ -180,20 +186,18 @@ def parse_args(argv):
             caption = arg
 
     if action_name == "help":
-        print(usage)
+        log(usage)
         sys.exit()
     elif action_name == "post":
         if not image_path:
-            print("Error: missing image file path")
-            print(f"Usage: {usage}")
+            log(f"Error: missing image file path\n{usage}")
             sys.exit(2)
 
         action = PostAction(image_path = image_path, date = date, caption = caption)
     elif action_name == "publish":
         action = PublishAction(remote = remote)
     else:
-        print("Error: unrecognized action")
-        print(f"Usage: {usage}")
+        log(f"Error: unrecognized action\n{usage}")
         sys.exit(2)
 
     return action
