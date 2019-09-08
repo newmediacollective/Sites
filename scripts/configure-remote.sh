@@ -38,5 +38,5 @@ chown -R www-data /website
 
 echo "$result"
 
-rsync -vh -b --backup-dir=nginx-conf-backup $nginx_config_file root@$server:$remote_nginx_config_file
+rsync -vh --no-perms --no-owner --no-group -b --backup-dir=nginx-conf-backup $nginx_config_file root@$server:$remote_nginx_config_file
 ssh root@$server systemctl restart nginx

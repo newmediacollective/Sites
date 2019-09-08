@@ -9,4 +9,4 @@ source "$script_dir/locations.sh"
 
 server=$(head -n 1 $server_file)
 
-rsync -vh root@$server:$remote_nginx_config_file $nginx_config_file
+rsync -vh --no-perms --no-owner --no-group root@$server:$remote_nginx_config_file $nginx_config_file
