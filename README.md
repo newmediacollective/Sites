@@ -140,4 +140,4 @@ If you have [ImageMagick](https://imagemagick.org/index.php) installed (`brew in
 ./scripts/optimize-images.sh
 ```
 
-This uses ImageMagick to export all `*.jpg` images as progress jpegs with Google's recommended settings.
+This uses ImageMagick to export all `*.jpg` images as progressive jpegs with Google's recommended settings.
