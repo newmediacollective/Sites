@@ -64,13 +64,13 @@ class Post:
         if not self.caption:
             return f"""
     <div class="post">
-        <img src="../images/{self.image}">
+        <img src="../images/{self.image}" alt="">
         <p class="date">{self.date}</p>
     </div>"""
         else:
             return f"""
     <div class="post">
-        <img src="../images/{self.image}">
+        <img src="../images/{self.image}" alt="">
         <p class="caption">{self.caption}</p>
         <p class="date">{self.date}</p>
     </div>"""
@@ -108,8 +108,6 @@ class PublishAction:
         log("Publishing locally...")
 
         properties = get_properties()
-        title = properties["title"]
-
         template_names = [filename for filename in listdir(template_dir)]
 
         for template_name in template_names:
@@ -118,8 +116,9 @@ class PublishAction:
             with open(join(template_dir, template_name), "r") as template_file:
                 template = template_file.read()
 
+            view = template
             for key, value in properties.items():
-                view = template.replace(f"{{{key}}}", value)
+                view = view.replace(f"{{{key}}}", value)
 
             with open(join(view_dir, template_name), "w") as view_file:
                 view_file.write(view)

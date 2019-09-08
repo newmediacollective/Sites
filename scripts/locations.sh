@@ -52,6 +52,7 @@ posts_file="$content_dir/posts.json"
 properties_file="$content_dir/properties.json"
 main_style_file="$style_dir/main.css"
 error_style_file="$style_dir/error.css"
+robots_file="$content_dir/robots.txt"
 
 # Input
 template_dir="$script_dir/../templates"

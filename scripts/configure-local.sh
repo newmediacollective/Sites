@@ -9,10 +9,21 @@ source "$script_dir/locations.sh"
 
 echo "\n---"
 read -p "What's the title of the website? " title
-sed "s/{title}/$title/g" content/properties.json > $properties_file
+
+echo "\n---"
+read -p "What's the website's description? " description
+
+properties=$(cat content/properties.json)
+properties="${properties/\{title\}/$title}"
+properties="${properties/\{description\}/$description}"
+echo $properties > $properties_file
 
 if [ ! -f $posts_file ]; then
     cp content/posts.json $posts_file
+fi
+
+if [ ! -f $robots_file ]; then
+    cp content/robots.txt $robots_file
 fi
 
 if [ ! -f $main_style_file ]; then
