@@ -34,8 +34,8 @@ This will:
 - Remotely:
   - Create a `/website` directory
   - Install nginx
-  - Copy the nginx config from `~/.website/config` to `/etc/nginx/`
-  - A backup of the remote nginx config is stored in `/etc/nginx/nginx-conf-backup`
+  - Copy the nginx config from `~/.website/config` to `/etc/nginx`
+    - A backup of the remote nginx config is stored in `/etc/nginx/nginx-conf-backup` if there is an existing config
 
 ### HTTPS (optional)
 We can use letsencrypt and certbot for HTTPS support.
