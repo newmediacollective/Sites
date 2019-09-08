@@ -57,23 +57,11 @@ This will update your nginx config - if you'd like to copy it back to your local
 ```
 
 ### Icons (optional)
-If you fill the `~/.website/content/icons` directory with the following files, your website will automatically serve favicons and apple-touch icons:
+If you fill the `~/.website/content/icons` directory with the following files, your website will automatically serve a favicon and apple touch icon:
 ```
-apple-touch-icon-114x114-precomposed.png
-apple-touch-icon-114x114.png
-apple-touch-icon-72x72-precomposed.png
-apple-touch-icon-72x72.png
-apple-touch-icon-precomposed.png
-apple-touch-icon.png
-favicon.ico
+favicon.ico (64x64)
+apple-touch-icon.png (180x180)
 ```
-
-- All sizes are included in the filename, except:
-  - `favicon.ico`: 64x64
-  - `apple-touch-icon-precomposed.png`: 114x114
-  - `apple-touch-icon.png`: 114x114
-
-The `-precomposed` files are for Android devices, but they can be the exact same image file as their non-`precomposed` version.
 
 ## Usage
 Use the following commands and helper scripts to update and monitor your website:
