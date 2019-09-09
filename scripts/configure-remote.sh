@@ -31,7 +31,7 @@ echo "Configuring $server..."
 
 result=$(ssh root@$server '
 apt-get update
-apt-get install nginx
+apt-get -y install nginx
 mkdir -p /website
 chown -R www-data /website
 ')
