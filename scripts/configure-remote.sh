@@ -17,7 +17,7 @@ fi
 server=$(head -n 1 $server_file)
 
 if [ ! -f $nginx_config_file ]; then
-    sed "s/localhost/$server/g" config/nginx.conf > $nginx_config_file
+    sed "s/default_server/$server/g" config/nginx.conf > $nginx_config_file
 fi
 
 echo "\n---"
