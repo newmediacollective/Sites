@@ -43,11 +43,11 @@ We can use letsencrypt and certbot for HTTPS support.
 On your remote machine, run the following (when prompted, make sure to use the same remote host you entered above):
 ```
 sudo apt-get update
-sudo apt-get install software-properties-common
+sudo apt-get install -y software-properties-common
 sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
+sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt-get update
-sudo apt-get install certbot python-certbot-nginx
+sudo apt-get install -y certbot python-certbot-nginx
 sudo certbot --nginx
 ```
 
