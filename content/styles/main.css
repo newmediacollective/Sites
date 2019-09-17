@@ -17,7 +17,20 @@ body {
   color: #595959;
   text-align: center;
   margin-top: 40pt;
-  margin-bottom: 30pt;
+  margin-bottom: 15pt;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
+  Subtitle Styling
+*/
+.subtitle {
+  font-size: small;
+  color: #999999;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 40pt;
   margin-left: 0;
   margin-right: 0;
 }

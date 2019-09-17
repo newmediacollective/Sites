@@ -53,6 +53,7 @@ properties_file="$content_dir/properties.json"
 main_style_file="$style_dir/main.css"
 error_style_file="$style_dir/error.css"
 robots_file="$content_dir/robots.txt"
+sitemap_file="$content_dir/sitemap.txt"
 
 # Input
 template_dir="$script_dir/../templates"

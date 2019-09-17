@@ -59,7 +59,7 @@ This will update your nginx config - if you'd like to copy it back to your local
 ### Icons (optional)
 If you fill the `~/.website/content/icons` directory with the following files, your website will automatically serve a favicon and apple touch icon:
 ```
-favicon.ico (64x64)
+icon.png (64x64)
 apple-touch-icon.png (180x180)
 ```
 
