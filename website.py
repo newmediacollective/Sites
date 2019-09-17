@@ -64,13 +64,17 @@ class Post:
         if not self.caption:
             return f"""
     <div class="post">
-        <img src="../images/{self.image}" alt="">
+        <a href="../images/{self.image}">
+            <img src="../images/{self.image}" alt="">
+        </a>
         <p class="date">{self.date}</p>
     </div>"""
         else:
             return f"""
     <div class="post">
-        <img src="../images/{self.image}" alt="">
+        <a href="../images/{self.image}">
+            <img src="../images/{self.image}" alt="">
+        </a>
         <p class="caption">{self.caption}</p>
         <p class="date">{self.date}</p>
     </div>"""
