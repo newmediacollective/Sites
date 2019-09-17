@@ -119,3 +119,15 @@ body {
   margin-left: 0;
   margin-right: 0;
 }
+
+/*
+  Footer Image Styling
+*/
+.footer-image {
+  display: block;
+  width: 40px;
+  margin-top: 0;
+  margin-bottom: 60pt;
+  margin-left: auto;
+  margin-right: auto;
+}
