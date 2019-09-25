@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # configure-server.sh
@@ -20,13 +20,13 @@ if [ ! -f $nginx_config_file ]; then
     sed "s/default_server/$server/g" config/nginx.conf > $nginx_config_file
 fi
 
-echo "\n---"
+printf "\n---\n"
 echo "Website host configured as: $server"
 echo "> open $config_dir to update"
 
 
 # Configure remote
-echo "\n---"
+printf "\n---\n"
 echo "Configuring $server..."
 
 result=$(ssh root@$server '

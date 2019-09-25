@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # configure-local.sh
@@ -7,10 +7,10 @@
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "$script_dir/locations.sh"
 
-echo "\n---"
+printf "\n---\n"
 read -p "What's the title of the website? " title
 
-echo "\n---"
+printf "\n---\n"
 read -p "What's the website's description? " description
 
 properties=$(cat content/properties.json)
@@ -34,5 +34,5 @@ if [ ! -f $error_style_file ]; then
     cp content/styles/error.css $error_style_file
 fi
 
-echo "\n---"
+printf "\n---\n"
 echo "Website \"$title\" configured in $website_dir"
