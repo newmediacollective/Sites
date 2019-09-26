@@ -9,7 +9,7 @@ sudo apt-get install -y python3-pip python3-dev python3-setuptools python3-venv 
 
 python3 -m venv app/.env
 source app/.env/bin/activate
-pip install wheel gunicorn flask PyJWT
+pip install wheel flask gunicorn gevent PyJWT
 deactivate
 
 #

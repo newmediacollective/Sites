@@ -9,7 +9,7 @@ import json
 from content_manager import ContentManager
 from os.path import join
 from uuid import uuid4
-from flask import Flask, request, Response
+from flask import Flask, request, abort
 from post import Post
 
 app = Flask(__name__)
@@ -28,41 +28,43 @@ with open(secret_path, "r") as secret_file:
 # Routes
 #
 
+@app.errorhandler(400)
+def handle_400(error):
+    return ({ "error": "invalid request" }, 400)
+
+@app.errorhandler(401)
+def handle_401(error):
+    return ({ "error": "unauthorized" }, 401)
+
 @app.route("/posts", methods=["POST"])
 def handle_post():
-    unauthorized_response = Response(json.dumps({ "error": "unauthorized" }), status = 401, mimetype = "application/json")
-    invalid_request_response = Response(json.dumps({ "error": "invalid request" }), status = 400, mimetype = "application/json")
-
     if app.debug:
         sitename = request.headers.get("Sitename")
-
         if not sitename:
-            return invalid_request_response
+            abort(400)
     else:
         bearer = request.headers.get("Authorization")
-
         if not bearer:
-            return unauthorized_response
+            abort(401)
 
         try:
             token = bearer.split()[-1]
             payload = jwt.decode(token, secret, algorithms=["HS256"])
         except:
-            return unauthorized_response
+            abort(401)
 
         sitename = payload.get("sitename")
-
         if sitename != request.host:
-            return unauthorized_response
+            abort(401)
 
     if not request.form or not request.files:
-        return invalid_request_response
+        abort(400)
 
     caption = request.form.get("caption")
     image = request.files.get("image")
 
     if not caption or not image:
-        return invalid_request_response
+        abort(400)
 
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
@@ -79,7 +81,7 @@ def handle_post():
     os.remove(tmp_image_path)
 
     # Respond
-    return Response(json.dumps(post.to_json()), status = 201, mimetype = "application/json")
+    return (post.to_json(), 201)
 
 #
 # Main
