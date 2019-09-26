@@ -1,0 +1,9 @@
+#
+# .gitignore
+#
+
+.env
+.tmp
+.sites
+__pycache__
+website.sock
