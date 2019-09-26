@@ -99,7 +99,7 @@ def main(argv):
     usage += "> python3 site_manager.py update_nginx"
 
     if len(argv) == 0:
-        log(usage)
+        print(usage)
         sys.exit(2)
 
     action_name = argv[0]
@@ -110,7 +110,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:],"s:t:d:")
     except getopt.GetoptError:
-        log(usage)
+        print(usage)
         sys.exit(2)
 
     for opt, arg in opts:
@@ -121,18 +121,18 @@ def main(argv):
         elif opt == "-d":
             description = arg
         else:
-            log(f"Error: unrecognized option\n{usage}")
+            print(f"Error: unrecognized option\n{usage}")
             sys.exit(2)
 
     if action_name == "help":
-        log(usage)
+        print(usage)
         sys.exit()
     elif action_name == "create":
         create(sitename = sitename, title = title, description = description)
     elif action_name == "update_nginx":
         update_nginx()
     else:
-        log(f"Error: unrecognized action\n{usage}")
+        print(f"Error: unrecognized action\n{usage}")
         sys.exit(2)
 
 if __name__ == "__main__":

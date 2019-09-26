@@ -35,7 +35,6 @@ sudo ufw allow "Nginx Full"
 sudo add-apt-repository -y universe ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install -y software-properties-common certbot
-sudo certbot
 
 #
 # Gunicorn

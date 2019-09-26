@@ -16,6 +16,7 @@ cd website
 source scripts/setup_server.sh
 cd app
 python3 site_manager.py create -s "sitename" -t "title" -d "description"
+sudo certbot --nginx -d {host} -d www.{host}
 python3 site_manager.py update_nginx
 sudo systemctl restart nginx
 ```

@@ -123,7 +123,7 @@ def main(argv):
     usage = "Usage: python3 content_manager.py regenerate -s sitename (e.g. google.com)"
 
     if len(argv) == 0:
-        log(usage)
+        print(usage)
         sys.exit(2)
 
     action_name = argv[0]
@@ -132,7 +132,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv[1:],"s:")
     except getopt.GetoptError:
-        log(usage)
+        print(usage)
         sys.exit(2)
 
     for opt, arg in opts:
@@ -140,12 +140,12 @@ def main(argv):
             sitename = arg
 
     if action_name == "help":
-        log(usage)
+        print(usage)
         sys.exit()
     elif action_name == "regenerate":
         regenerate(sitename = sitename)
     else:
-        log(f"Error: unrecognized action\n{usage}")
+        print(f"Error: unrecognized action\n{usage}")
         sys.exit(2)
 
 if __name__ == "__main__":
