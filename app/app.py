@@ -3,6 +3,7 @@
 #
 
 import os
+import jwt
 import json
 
 from content_manager import ContentManager
@@ -18,6 +19,10 @@ app = Flask(__name__)
 #
 
 tmp_dir = join(app.root_path, ".tmp")
+secret_path = join(app.root_path, ".sites/secret.txt")
+
+with open(secret_path, "r") as secret_file:
+    secret = secret_file.read().strip()
 
 #
 # Routes
@@ -25,22 +30,39 @@ tmp_dir = join(app.root_path, ".tmp")
 
 @app.route("/posts", methods=["POST"])
 def handle_post():
-    error_response = Response(json.dumps({ "error": "invalid request" }), status = 400, mimetype = "application/json")
+    unauthorized_response = Response(json.dumps({ "error": "unauthorized" }), status = 401, mimetype = "application/json")
+    invalid_request_response = Response(json.dumps({ "error": "invalid request" }), status = 400, mimetype = "application/json")
 
-    raw_host = request.host
-    if raw_host.startswith("www."):
-        raw_host = raw_host.replace("www.", "")
+    if app.debug:
+        sitename = request.headers.get("Sitename")
 
-    raw_host = "christianbator.com"
+        if not sitename:
+            return invalid_request_response
+    else:
+        bearer = request.headers.get("Authorization")
+
+        if not bearer:
+            return unauthorized_response
+
+        try:
+            token = bearer.split()[-1]
+            payload = jwt.decode(token, secret, algorithms=["HS256"])
+        except:
+            return unauthorized_response
+
+        sitename = payload.get("sitename")
+
+        if sitename != request.host:
+            return unauthorized_response
 
     if not request.form or not request.files:
-        return error_response
+        return invalid_request_response
 
     caption = request.form.get("caption")
     image = request.files.get("image")
 
     if not caption or not image:
-        return error_response
+        return invalid_request_response
 
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
@@ -50,7 +72,7 @@ def handle_post():
     image.save(tmp_image_path)
 
     # Create post
-    content_manager = ContentManager(app_dir = app.root_path, sitename = raw_host)
+    content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
     post = content_manager.create_post(image_path = tmp_image_path, caption = caption)
 
     # Clean up temporary file
@@ -64,4 +86,5 @@ def handle_post():
 #
 
 if __name__ == "__main__":
+    app.debug = True
     app.run(host="0.0.0.0")

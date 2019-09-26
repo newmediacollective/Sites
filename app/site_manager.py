@@ -20,6 +20,11 @@ sites_dir = join(app_dir, ".sites")
 # Methods
 #
 def create(sitename, title, description):
+    if not exists(sites_dir):
+        os.makedirs(sites_dir)
+        secret_path = join(sites_dir, "secret.txt")
+        os.system(f"openssl rand -base64 32 > {secret_path}")
+
     site_dir = join(sites_dir, sitename)
 
     if exists(site_dir):
