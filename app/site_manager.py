@@ -70,27 +70,17 @@ def create(sitename, title, description):
 
         json.dump(properties, properties_file, sort_keys = True, indent = 4)
 
-    #
-    # Config
-    #
-    config_dir = join(site_dir, "config")
-    os.makedirs(config_dir)
-
-    with open(join(app_dir, "../template/config/server.conf"), "r") as config_template_file:
-        config = config_template_file.read().replace("{host}", sitename)
-
-        with open(join(config_dir, "server.conf"), "w") as config_file:
-            config_file.write(config)
-
 def update_nginx():
+    with open(join(app_dir, "../template/config/server.conf"), "r") as server_block_template_file:
+        server_block_template = server_block_template_file.read()
+
     sitenames = [sitename for sitename in os.listdir(sites_dir) if os.path.isdir(join(sites_dir, sitename))]
 
     server_blocks = []
     for sitename in sitenames:
         print(f"> Configuring {sitename}")
-        with open(join(sites_dir, f"{sitename}/config/server.conf"), "r") as server_block_file:
-            server_block = server_block_file.read()
-            server_blocks.append(server_block)
+        server_block = server_block_template.replace("{host}", sitename)
+        server_blocks.append(server_block)
 
     with open(join(app_dir, "../template/config/nginx.conf"), "r") as nginx_conf_template_file:
         nginx_conf = nginx_conf_template_file.read().replace("# {server_blocks}", "\n".join(server_blocks))
