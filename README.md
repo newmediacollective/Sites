@@ -1,4 +1,4 @@
-# Website
+# website
 A simple website manager for posting images
 
 ## Getting Started
