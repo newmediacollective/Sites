@@ -2,20 +2,9 @@
 set -euo pipefail
 
 #
-# Python
+# Update
 #
 sudo apt-get update
-sudo apt-get install -y python3-pip python3-dev python3-setuptools python3-venv build-essential libssl-dev libffi-dev
-
-python3 -m venv app/.env
-source app/.env/bin/activate
-pip install wheel flask gunicorn gevent PyJWT
-deactivate
-
-#
-# ImageMagick
-#
-sudo apt-get install -y imagemagick
 
 #
 # Nginx
@@ -37,9 +26,15 @@ sudo apt-get update
 sudo apt-get install -y software-properties-common certbot
 
 #
-# Gunicorn
+# ImageMagick
 #
-sudo cp ../template/config/website.service /etc/systemd/system/website.service
-sudo systemctl start website
-sudo systemctl enable website
-sudo systemctl status website
+sudo apt-get install -y imagemagick
+
+#
+# Python
+#
+sudo apt-get install -y python3-pip python3-dev python3-setuptools python3-venv build-essential libssl-dev libffi-dev
+python3 -m venv app/.env
+source app/.env/bin/activate
+pip install wheel
+pip install flask PyJWT gunicorn gevent
