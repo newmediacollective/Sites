@@ -45,7 +45,7 @@ source scripts/setup_local.sh
   * You can reactivate with `source app/.env/bin/activate` and exit with `deactivate`
 
 **3. Configure your remote environment**  
-Create a user named `webhost` with sudo privileges (so we don't run our server as `root`):
+Create a user named `webhost` with `sudo` privileges:
 ```
 ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
 ```
