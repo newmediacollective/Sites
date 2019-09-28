@@ -2,15 +2,15 @@
 set -euo pipefail
 
 #
-# Website
+# Sites
 #
-sudo cp ../template/config/website.service /etc/systemd/system/website.service
+sudo cp ../template/config/sites.service /etc/systemd/system/sites.service
 
-sudo systemctl start website
-sudo systemctl enable website
+sudo systemctl start sites
+sudo systemctl enable sites
 
 #
 # Nginx
 #
 sudo systemctl restart nginx
-sudo systemctl status nginx website
+sudo systemctl status nginx sites

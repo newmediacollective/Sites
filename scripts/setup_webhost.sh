@@ -2,12 +2,6 @@
 set -euo pipefail
 
 #
-# Usage
-#
-
-# ssh root@host "bash -s" -- < /path/to/setup_webhost.sh
-
-#
 # Variables
 #
 
