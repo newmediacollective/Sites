@@ -64,7 +64,7 @@ source scripts/setup_server.sh
   * Activate with `source app/.env/bin/activate`
   * Deactivate with `deactivate`
 * This will also setup [nginx](https://www.nginx.com/resources/wiki/) and [Let's Encrypt](https://letsencrypt.org)
-* Everything will be run from the `webhost` user as part of the nginx group, `www-data`.
+* Everything will be run from the `webhost` user as part of the nginx group, `www-data`
 
 **4. Create your site**
 ```
@@ -81,7 +81,7 @@ python app/site_manager.py create -s "{host}" -t "site title" -d "site descripti
 sudo certbot --nginx -d {host} -d www.{host}
 ```
 
-Follow the certbot prompts to obtain a certificate. When asked, choose "no redirect", we'll update the nginx config ourselves.
+We'll update the nginx config, so as long as you successfully create a certificate, the other prompts don't matter.
 
 **6. Start it up**  
 Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in `app/.sites`:
