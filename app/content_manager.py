@@ -7,6 +7,7 @@ import sys
 import json
 import getopt
 
+from subprocess import check_call, PIPE
 from os.path import splitext, join, exists, dirname
 from uuid import uuid4
 from datetime import datetime
@@ -47,7 +48,7 @@ class ContentManager:
         optimized_image_filename = image_identifier + image_file_extension
         optimized_image_path = join(self.images_dir, optimized_image_filename)
 
-        os.system(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}")
+        check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
         date = datetime.now().strftime("(%b %-d %Y)")

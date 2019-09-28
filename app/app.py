@@ -79,7 +79,12 @@ def handle_post():
 
     # Create post
     content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
-    post = content_manager.create_post(image_path = tmp_image_path, caption = caption)
+
+    try:
+        post = content_manager.create_post(image_path = tmp_image_path, caption = caption)
+    except Exception as error:
+        print(error)
+        abort(500)
 
     # Clean up temporary file
     os.remove(tmp_image_path)

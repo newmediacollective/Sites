@@ -8,6 +8,7 @@ import json
 import getopt
 import shutil
 
+from subprocess import check_call, PIPE
 from os.path import dirname, join, exists
 
 #
@@ -23,7 +24,11 @@ def create(sitename, title, description):
     if not exists(sites_dir):
         os.makedirs(sites_dir)
         secret_path = join(sites_dir, "secret.txt")
-        os.system(f"openssl rand -base64 32 > {secret_path}")
+
+        try:
+            check_call(f"openssl rand -base64 32 > {secret_path}", stderr = PIPE, shell = True)
+        except Exception as error:
+            sys.exit(error)
 
     site_dir = join(sites_dir, sitename)
 
