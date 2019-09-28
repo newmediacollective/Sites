@@ -1,7 +1,7 @@
 # Sites
-A set of tools to manage photo stream sites - in a few minutes you can have your own https site and the ability to post photos from anywhere.
+A set of tools to manage photo stream sites.
 
-Here's [my site](https://christianbator.com) managed with these tools.
+In a few minutes you can have your own https site and the ability to post photos from anywhere. Here's [my site](https://christianbator.com) managed with these tools.
 
 ## Getting Started
 Follow along with the instructions below, and your site should be up in no time.
