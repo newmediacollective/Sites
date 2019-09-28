@@ -38,28 +38,34 @@ cd Sites
 source scripts/setup_local.sh
 ```
 
-This will create a virtual environment in `app/.env` and install [Flask](https://www.fullstackpython.com/flask.html). All `python` commands should be run in with your virtual env activated! You can always reactivate with `source app/.env/bin/activate` and exit with `deactivate`.
+* This will create a virtual environment in `app/.env` and install [Flask](https://www.fullstackpython.com/flask.html)
+* **All `python` commands should be run with your virtual env activated** 
+  * You can reactivate with `source app/.env/bin/activate` and exit with `deactivate`
 
-**3. Configure your remote environment**
+**3. Configure your remote environment**  
+Create a user named `webhost` with sudo privileges (so we don't run our server as `root`):
 ```
-# Create a user named `webhost` with sudo privileges (so we don't run our server as `root`)
 ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
+```
 
-# Configure the server
+Configure the server:
+```
 ssh webhost@{host}
 git clone git@github.com:christianbator/Sites.git
 cd Sites
 source scripts/setup_server.sh
 ```
 
-This will setup [nginx](https://www.nginx.com/resources/wiki/), [Let's Encrypt](https://letsencrypt.org), and your python environment. Everything will be run from the `webhost` user as part of the nginx default group, `www-data`.
+This will setup [nginx](https://www.nginx.com/resources/wiki/), [Let's Encrypt](https://letsencrypt.org), and your python environment. 
+
+Everything will be run from the `webhost` user as part of the nginx default group, `www-data`.
 
 **4. Create your site**
 ```
 python app/site_manager.py create -s "{host}" -t "site title" -d "site description"
 ```
 
-This will create the directory `app/.sites/{host}` that contains all your site's data. It will also generate a secret key in `app/.sites/secret.txt` that we'll use to sign tokens. To post to your site you'll need to provide a valid token (more on that later).
+This will create the directory `app/.sites/{host}` that contains all your site's data. It will also generate a secret key in `app/.sites/secret.txt` that we'll use to sign tokens. To post to your site, you'll need to provide a valid token (more on that later).
 
 You can always update your title and description in the `app/.sites/{host}/data/properties.json` file.
 
@@ -70,12 +76,14 @@ sudo certbot --nginx -d {host} -d www.{host}
 
 Follow the certbot prompts to obtain a certificate. When asked, choose "no redirect" - it doesn't really matter though, we'll update the nginx config ourselves.
 
-**6. Start it up**
+**6. Start it up**  
+Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in `app/.sites`:
 ```
-# Updates the nginx config in /etc/nginx/nginx.conf for every site defined in app/.sites
 sudo python app/site_manager.py update_nginx
+```
 
-# Starts a gunicorn daemon (to serve the flask app for image uploads) and nginx (to serve the static site)
+Start nginx (to serve the static site) and a gunicorn daemon (to serve the flask app for image uploads):
+```
 ./scripts/start_services.sh
 ```
 
@@ -97,10 +105,7 @@ There are a few tools to help manage your site - you can even manage multiple si
 ### Syncing
 You can sync your site content to and from your remote server with:
 ```
-# Pull site down
 ./scripts/pull.sh {host}
-
-# Push site up
 ./scripts/push.sh {host}
 ```
 
@@ -110,10 +115,7 @@ This will just `rsync` the `app/.sites/{host}` directory to and from the remote 
 
 You can also sync the secret key with:
 ```
-# Pull secret down
 ./scripts/pull_secret.sh {host}
-
-# Push secret up
 ./scripts/push_secret.sh {host}
 ```
 
@@ -141,8 +143,10 @@ To post locally in debug mode, use:
 To post to your server, first pull the secret if you don't have it in `app/.sites/secret.txt`:
 ```
 ./scripts/pull_secret.sh {host}
+```
 
-# Verify we can create a token from it
+Then verify we can create a token from it:
+```
 pyjwt --key=$(cat app/.sites/secret.txt) encode sitename={host}
 ```
 
@@ -151,7 +155,7 @@ Then you can use the helper script to post images:
 ./scripts/post.sh {host} /path/to/image.jpg "caption"
 ```
 
-Under the hood, it's just an http post request to `https://{host}.posts` (meaning you can use that token to post images from anywhere):
+Under the hood, it's just an http post request to `https://{host}.posts`, meaning you can use that token to post images from anywhere:
 ```
 curl -i -H "Authorization: Bearer token" -F "image=@/path/to/image" -F "caption=caption" https://{host}/posts
 ```
@@ -169,13 +173,13 @@ Then push your site to your remote server:
 ```
 
 ### Regenerating Site
-If you ever run into a snag and edit the `app/.sites/{host}/data/posts.json` file (which is essentially a little database of posts), you can regenerate your site to match with:
+If you ever edit the `app/.sites/{host}/data/posts.json` file - which is essentially a little database of posts - you can regenerate your site with:
 ```
 python app/content_manager.py regenerate -s {host}
 ```
 
 ### Multiple Sites
-Managing multiple sites on the same machine is pretty simple, since all of the scripts take a {host} argumentL
+Managing multiple sites on the same machine is pretty simple, since all of the scripts take a {host} argument.
 
 **1. Create a new site on your server**
 ```
@@ -191,11 +195,6 @@ sudo certbot --nginx -d {new_host} -d www.{new_host}
 ```
 sudo python app/site_manager.py update_nginx
 sudo systemctl restart nginx
-```
-
-Then you can pull the site down to your local machine as mentioned above, with:
-```
-./scripts/pull.sh {new_host}
 ```
 
 ## Posting from your phone
