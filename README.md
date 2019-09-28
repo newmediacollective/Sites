@@ -1,12 +1,12 @@
 # sites ![Platform](https://img.shields.io/badge/Platform-macOS%20|%20ubuntu-blue.svg) ![Server](https://img.shields.io/badge/Server-nginx-brightgreen.svg) ![App](https://img.shields.io/badge/App-python%20|%20flask%20|%20gunicorn-red.svg)
 A set of tools to manage photo stream sites.
 
-In a few minutes you can have your own responsive, HTTPS site and the ability to post photos from anywhere.
+In a few minutes you can have your own HTTPS, responsive site that you can post photos to from anywhere.
 
-Here's [my site](https://christianbator.com) managed with these tools.
+As an example, here's [my site](https://christianbator.com) managed with these tools.
 
 ## Getting Started
-Follow along with the instructions below, and your site should be up in no time.
+Follow along with the instructions below to get started.
 
 ### Prerequisites
 * Python3 and ImageMagick installed locally
@@ -35,7 +35,7 @@ git clone git@github.com:christianbator/sites.git
 cd sites
 ```
 
-**2. Configure your local environment**
+**2. Configure your local environment**<br>
 If you already manage python virtual environments, feel free to set up a virtual environment how you normally do.
 
 Then run:
@@ -53,7 +53,7 @@ source scripts/setup_local.sh
   * Activate with `source app/.env/bin/activate`
   * Deactivate with `deactivate`
 
-**3. Configure your remote environment**
+**3. Configure your remote environment**<br>
 Create a user named `webhost` with `sudo` privileges:
 ```
 ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
