@@ -172,7 +172,7 @@ curl -i -H "Authorization: Bearer token" -F "image=@/path/to/image" -F "caption=
 ```
 
 ### Icons
-Fill in the `.sites/{host}/content/icons` directory with the following files so your site will automatically serve a favicon and apple touch icon:
+Fill in the `app/.sites/{host}/content/icons` directory with the following files so your site will automatically serve a favicon and apple touch icon:
 ```
 icon.png (64x64)
 apple-touch-icon.png (180x180)
