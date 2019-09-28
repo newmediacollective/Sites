@@ -208,7 +208,7 @@ sudo python app/site_manager.py update_nginx
 sudo systemctl restart nginx
 ```
 
-## Posting from your phone
+## Mobile Uploads
 As mentioned above, posting a photo is just an HTTP POST request, so you can post from anywhere.
 
 ### iOS
