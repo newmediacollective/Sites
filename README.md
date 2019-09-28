@@ -13,10 +13,13 @@ brew install python
 brew install imagemagick
 ```
 2. A domain name (e.g. google.com), which we'll call `{host}`
+
     a. I like [namecheap](https://www.namecheap.com)
 3. An Ubuntu 18.04 server (with ssh access to root)
+
     a. You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
 4. DNS configured to point the domain to the server
+
     a. You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
 
 Verify everything's good to go with:
