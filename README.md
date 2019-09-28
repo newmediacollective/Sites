@@ -1,7 +1,7 @@
 # Sites
 A set of tools to manage photo stream sites.
 
-In a few minutes you can have your own responsive, HTTPS site and the ability to post photos from anywhere. 
+In a few minutes you can have your own responsive, HTTPS site and the ability to post photos from anywhere.
 
 Here's [my site](https://christianbator.com) managed with these tools.
 
@@ -17,7 +17,7 @@ brew install imagemagick
 * A domain name (e.g. google.com), which we'll call `{host}`
   * I like [namecheap](https://www.namecheap.com)
 * An Ubuntu 18.04 server with ssh access to `root`
-  * You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)  
+  * You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
 * DNS configured to point the domain to the server
   * You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
 
@@ -41,11 +41,11 @@ source scripts/setup_local.sh
 ```
 
 * This will create a virtual environment in `app/.env`
-  * All `python` commands should be run with your virtual environment activated 
+  * All `python` commands should be run with your virtual environment activated
   * Activate with `source app/.env/bin/activate`
   * Deactivate with `deactivate`
 
-**3. Configure your remote environment**  
+**3. Configure your remote environment**
 Create a user named `webhost` with `sudo` privileges:
 ```
 ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
@@ -60,7 +60,7 @@ source scripts/setup_server.sh
 ```
 
 * This will create a virtual environment in `app/.env`
-  * All `python` commands should be run with your virtual environment activated 
+  * All `python` commands should be run with your virtual environment activated
   * Activate with `source app/.env/bin/activate`
   * Deactivate with `deactivate`
 * This will also setup [nginx](https://www.nginx.com/resources/wiki/) and [Let's Encrypt](https://letsencrypt.org)
@@ -83,10 +83,10 @@ sudo certbot --nginx -d {host} -d www.{host}
 
 We'll update the nginx config, so as long as you successfully create a certificate, the other prompts don't matter.
 
-**6. Start it up**  
+**6. Start it up**
 Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in `app/.sites`:
 ```
-sudo python app/site_manager.py update_nginx
+sudo python3 app/site_manager.py update_nginx
 ```
 
 Start nginx (to serve the static site) and a gunicorn daemon (to serve the flask app for image uploads):
@@ -204,7 +204,7 @@ sudo certbot --nginx -d {new_host} -d www.{new_host}
 
 **3. Update and restart nginx**
 ```
-sudo python app/site_manager.py update_nginx
+sudo python3 app/site_manager.py update_nginx
 sudo systemctl restart nginx
 ```
 

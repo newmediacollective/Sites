@@ -4,7 +4,8 @@ set -euo pipefail
 #
 # Sites
 #
-sudo cp ../template/config/sites.service /etc/systemd/system/sites.service
+sudo cp template/config/sites.service /etc/systemd/system/sites.service
+sudo systemctl daemon-reload
 
 sudo systemctl start sites
 sudo systemctl enable sites
