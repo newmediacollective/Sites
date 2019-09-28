@@ -12,7 +12,7 @@ sudo apt-get update
 sudo usermod -aG www-data webhost
 
 sudo apt-get install -y nginx
-sudo rm -r /etc/nginx/sites-available /etc/nginx/sites-enabled /etc/nginx/modules-available /etc/nginx/modules-enabled
+sudo rm -rf /etc/nginx/sites-available /etc/nginx/sites-enabled /etc/nginx/modules-available /etc/nginx/modules-enabled
 
 sudo ufw allow "Nginx HTTP"
 sudo ufw allow "Nginx HTTPS"
@@ -21,7 +21,8 @@ sudo ufw allow "Nginx Full"
 #
 # LetsEncrypt
 #
-sudo add-apt-repository -y universe ppa:certbot/certbot
+sudo add-apt-repository -y universe
+sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install -y software-properties-common certbot
 
