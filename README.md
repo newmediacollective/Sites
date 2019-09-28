@@ -7,25 +7,21 @@ Here's [my site](https://christianbator.com) managed with these tools.
 Follow along with the instructions below, and your site should be up in no time.
 
 ### Prerequisites
-**1. Python3 and ImageMagick installed locally**
+* Python3 and ImageMagick installed locally
 ```
 brew install python
 brew install imagemagick
 ```
-**2. A domain name (e.g. google.com), which we'll call `{host}`**   
+* A domain name (e.g. google.com), which we'll call `{host}`
     * I like [namecheap](https://www.namecheap.com)  
-**3. An Ubuntu 18.04 server (with ssh access to root)**  
+* An Ubuntu 18.04 server (with ssh access to root)
     * You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)  
-**4. DNS configured to point the domain to the server**  
+* DNS configured to point the domain to the server
     * You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)  
 
-Verify your domain with:
+Verify your domain points to your ip with:
 ```
 nslookup {host}
-
-# You should see something like:
-## Name:    {host}
-## Address: {server_ip}
 ```
 
 ### Setup
@@ -208,18 +204,20 @@ As mentioned above, posting a photo is just an http post request, so you can pos
 ### iOS
 I made an iOS shortcut that you can use to post from your iPhone:
 
-**1. Enable shortcut sharing: Settings > Shortcuts > Allow Untrusted Shortcuts**
-**2. Download [the shortcut](https://www.icloud.com/shortcuts/2517d7a649e541289d09ba00c86c05f3)**
-**3. Get your sites and tokens with:**
+* Enable shortcut sharing: Settings > Shortcuts > Allow Untrusted Shortcuts
+* Download [the shortcut](https://www.icloud.com/shortcuts/2517d7a649e541289d09ba00c86c05f3)
+* Get your sites and tokens with:
 ```
 python scripts/ios_shortcut_input.py
 ```
-**4. Paste the result into the shortcut configuration when prompted**
+* Paste the result into the shortcut configuration when prompted
 
 You should be able to run the shortcut and select a photo to post (it will also appear as a share sheet option).
 
 ### Android
-Buy a [real phone](https://www.apple.com/iphone/)
+Buy a [real phone](https://www.apple.com/iphone/) ;)
+
+Open to submissions!
 
 ## Caveats
 The site design is simple and inflexible, but there are already plenty of tools for managing complex sites. I wanted to post photos to an https site from my laptop and phone, and I wanted to serve them as static content.
