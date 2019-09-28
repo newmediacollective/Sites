@@ -24,7 +24,7 @@ sudo ufw allow "Nginx Full"
 sudo add-apt-repository -y universe
 sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt-get update
-sudo apt-get install -y software-properties-common certbot
+sudo apt-get install -y software-properties-common certbot python-certbot-nginx
 
 #
 # ImageMagick
@@ -35,6 +35,8 @@ sudo apt-get install -y imagemagick
 # Python
 #
 sudo apt-get install -y python3-pip python3-dev python3-setuptools python3-venv build-essential libssl-dev libffi-dev
+
+rm -rf app/.env
 python3 -m venv app/.env
 source app/.env/bin/activate
 pip install wheel

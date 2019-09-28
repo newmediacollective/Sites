@@ -54,6 +54,9 @@ ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
 Configure the server:
 ```
 ssh webhost@{host}
+
+# You'll be prompted to update your password - do so, then log in again
+
 git clone git@github.com:christianbator/Sites.git
 cd Sites
 source scripts/setup_server.sh
@@ -81,7 +84,7 @@ python app/site_manager.py create -s "{host}" -t "site title" -d "site descripti
 sudo certbot --nginx -d {host} -d www.{host}
 ```
 
-We'll update the nginx config, so as long as you successfully create a certificate, the other prompts don't matter.
+We'll update the nginx config, so you can ignore the error that cerbot failed to install the certificate.
 
 **6. Start it up**
 Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in `app/.sites`:
@@ -92,6 +95,11 @@ sudo python3 app/site_manager.py update_nginx
 Start nginx (to serve the static site) and a gunicorn daemon (to serve the flask app for image uploads):
 ```
 ./scripts/start_services.sh
+```
+
+Generate your site:
+```
+python app/content_manager.py regenerate -s {host}
 ```
 
 You should see an empty site with your title and description at https://{host}
