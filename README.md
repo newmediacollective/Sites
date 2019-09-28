@@ -41,8 +41,9 @@ source scripts/setup_local.sh
 ```
 
 * This will create a virtual environment in `app/.env`
-* All `python` commands should be run with your virtual env activated 
-  * You can reactivate with `source app/.env/bin/activate` and exit with `deactivate`
+  * All `python` commands should be run with your virtual environment activated 
+  * Activate with `source app/.env/bin/activate`
+  * Deactivate with `deactivate`
 
 **3. Configure your remote environment**  
 Create a user named `webhost` with `sudo` privileges:
@@ -59,8 +60,9 @@ source scripts/setup_server.sh
 ```
 
 * This will create a virtual environment in `app/.env`
-* All `python` commands should be run with your virtual env activated 
-  * You can reactivate with `source app/.env/bin/activate` and exit with `deactivate`
+  * All `python` commands should be run with your virtual environment activated 
+  * Activate with `source app/.env/bin/activate`
+  * Deactivate with `deactivate`
 * This will also setup [nginx](https://www.nginx.com/resources/wiki/) and [Let's Encrypt](https://letsencrypt.org)
 * Everything will be run from the `webhost` user as part of the nginx group, `www-data`.
 
