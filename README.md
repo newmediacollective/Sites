@@ -36,6 +36,14 @@ cd sites
 ```
 
 **2. Configure your local environment**
+If you already manage python virtual environments, feel free to set up a virtual environment how you normally do.
+
+Then run:
+```
+pip install -r requirements.txt
+```
+
+Otherwise, you can set up a virtual environment with:
 ```
 source scripts/setup_local.sh
 ```
