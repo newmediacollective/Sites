@@ -1,7 +1,7 @@
 # Sites
 A set of tools to manage photo stream sites.
 
-In a few minutes you can have your own HTTPS site and the ability to post photos from anywhere. 
+In a few minutes you can have your own responsive, HTTPS site and the ability to post photos from anywhere. 
 
 Here's [my site](https://christianbator.com) managed with these tools.
 
