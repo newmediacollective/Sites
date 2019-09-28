@@ -13,12 +13,11 @@ brew install python
 brew install imagemagick
 ```
 1. A domain name (e.g. google.com), which we'll call `{host}`
-  - I like [namecheap](https://www.namecheap.com)
-}
+  1. I like [namecheap](https://www.namecheap.com)
 1. An Ubuntu 18.04 server (with ssh access to root)
-  - You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
+  1. You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
 1. DNS configured to point the domain to the server
-  - You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
+  1. You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
 
 Verify everything's good to go with:
 ```
@@ -40,14 +39,14 @@ git clone git@github.com:christianbator/Sites.git
 cd Sites
 ```
 
-1. Configure your local environment
+2. Configure your local environment
 ```
 source scripts/setup_local.sh
 ```
 
 This will create a virtual environment in `app/.env` and install [Flask](https://www.fullstackpython.com/flask.html). All `python` commands should be run in with your virtual env activated! You can always reactivate with `source app/.env/bin/activate` and exit with `deactivate`.
 
-1. Configure your remote environment
+3. Configure your remote environment
 ```
 # Create a user named `webhost` with sudo privileges (so we don't run our server as `root`)
 ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
@@ -61,7 +60,7 @@ source scripts/setup_server.sh
 
 This will setup [nginx](https://www.nginx.com/resources/wiki/), [Let's Encrypt](https://letsencrypt.org), and your python environment. Everything will be run from the `webhost` user as part of the nginx default group, `www-data`.
 
-1. Create your site
+4. Create your site
 ```
 python app/site_manager.py create -s "{host}" -t "site title" -d "site description"
 ```
@@ -70,14 +69,14 @@ This will create the directory `app/.sites/{host}` that contains all your site's
 
 You can always update your title and description in the `app/.sites/{host}/data/properties.json` file.
 
-1. Encrypt the traffic
+5. Encrypt the traffic
 ```
 sudo certbot --nginx -d {host} -d www.{host}
 ```
 
 Follow the certbot prompts to obtain a certificate. When asked, choose "no redirect" - it doesn't really matter though, we'll update the nginx config ourselves.
 
-1. Start it up
+6. Start it up
 ```
 # Updates the nginx config in /etc/nginx/nginx.conf for every site defined in app/.sites
 sudo python app/site_manager.py update_nginx
@@ -189,12 +188,12 @@ Managing multiple sites on the same machine is pretty simple, since all of the s
 python app/site_manager.py create -s "{new_host}" -t "new site title" -d "new site description"
 ```
 
-1. Encrypt the traffic
+2. Encrypt the traffic
 ```
 sudo certbot --nginx -d {new_host} -d www.{new_host}
 ```
 
-1. Update and restart nginx
+3. Update and restart nginx
 ```
 sudo python app/site_manager.py update_nginx
 sudo systemctl restart nginx
@@ -211,14 +210,13 @@ As mentioned above, posting a photo is just an http post request, so you can pos
 ### iOS
 I made an iOS shortcut that you can use to post from your iPhone:
 
-1. Enable shortcut sharing:
-  - Settings > Shortcuts > Allow Untrusted Shortcuts
-1. Download [the shortcut](https://www.icloud.com/shortcuts/2517d7a649e541289d09ba00c86c05f3)
-1. Get your sites and tokens with:
+1. Enable shortcut sharing: Settings > Shortcuts > Allow Untrusted Shortcuts
+2. Download [the shortcut](https://www.icloud.com/shortcuts/2517d7a649e541289d09ba00c86c05f3)
+3. Get your sites and tokens with:
 ```
 python scripts/ios_shortcut_input.py
 ```
-1. Paste the result into the shortcut configuration when prompted
+4. Paste the result into the shortcut configuration when prompted
 
 You should be able to run the shortcut and select a photo to post (it will also appear as a share sheet option).
 
