@@ -60,11 +60,15 @@ def handle_post():
     if not request.form or not request.files:
         abort(400)
 
-    caption = request.form.get("caption")
     image = request.files.get("image")
 
-    if not caption or not image:
+    if not image:
         abort(400)
+
+    caption = request.form.get("caption")
+
+    if not caption:
+        caption = ""
 
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
