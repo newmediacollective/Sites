@@ -215,7 +215,7 @@ As mentioned above, posting a photo is just an HTTP POST request, so you can pos
 I made an iOS shortcut that you can use to post from your iPhone:
 
 * Enable shortcut sharing: Settings > Shortcuts > Allow Untrusted Shortcuts
-* Download [the shortcut](https://www.icloud.com/shortcuts/2517d7a649e541289d09ba00c86c05f3)
+* Download [the shortcut](https://www.icloud.com/shortcuts/bd5d5b9065684edcab4a2f2f7dbbb270)
 * Get your sites and tokens with:
 ```
 python scripts/ios_shortcut_input.py
