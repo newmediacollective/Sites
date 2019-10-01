@@ -140,14 +140,6 @@ These scripts just `rsync` the `app/sites/{host}` directory to and from the remo
 
 **Note:** this will overwrite the destination site!
 
-You can also sync the secret key with:
-```
-./scripts/pull_secret.sh {host}
-./scripts/push_secret.sh {host}
-```
-
-**Note:** for now, there is only one secret shared across all sites on the same server.
-
 ### Running Locally
 To run the app locally in debug mode, use:
 ```
