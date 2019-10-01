@@ -12,7 +12,7 @@ from os.path import dirname, join, realpath, isdir
 # Constants
 #
 scripts_dir = dirname(realpath(__file__))
-sites_dir = join(scripts_dir, "../app/.sites")
+sites_dir = join(scripts_dir, "../app/sites")
 secret_path = join(sites_dir, "secret.txt")
 
 with open(secret_path, "r") as secret_file:

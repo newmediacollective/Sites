@@ -15,7 +15,7 @@ from os.path import dirname, join, exists
 # Constants
 #
 app_dir = dirname(os.path.realpath(__file__))
-sites_dir = join(app_dir, ".sites")
+sites_dir = join(app_dir, "sites")
 
 #
 # Methods

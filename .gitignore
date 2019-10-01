@@ -4,6 +4,7 @@
 
 .env
 .tmp
-.sites
-__pycache__
+.backup
+sites/
 website.sock
+__pycache__

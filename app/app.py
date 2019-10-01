@@ -19,7 +19,7 @@ app = Flask(__name__)
 #
 
 tmp_dir = join(app.root_path, ".tmp")
-secret_path = join(app.root_path, ".sites/secret.txt")
+secret_path = join(app.root_path, "sites/secret.txt")
 
 with open(secret_path, "r") as secret_file:
     secret = secret_file.read().strip()

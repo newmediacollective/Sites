@@ -26,7 +26,7 @@ image_file_extension = ".jpg"
 class ContentManager:
 
     def __init__(self, app_dir, sitename):
-        sites_dir = join(app_dir, ".sites")
+        sites_dir = join(app_dir, "sites")
 
         self.sitename = sitename
 
