@@ -127,7 +127,7 @@ You should see an empty site with your title and description at https://{host}
   * All trailing slash urls are rewritten to non trailing slash urls
 
 ## Usage
-There are a few tools to help manage your site - you can even manage multiple sites, but they must be hosted on the same server.
+There are a few tools to help manage your site(s).
 
 ### Syncing
 You can sync your site content to and from your remote server with:
@@ -174,7 +174,7 @@ To post to your server, first pull the secret if you don't have it in `app/sites
 
 Then verify we can create a token from it:
 ```
-pyjwt --key=$(cat app/sites/secret.txt) encode sitename={host}
+pyjwt --key=$(cat app/sites/{host}/secret.txt) encode sitename={host}
 ```
 
 Then you can use the helper script to post images:
@@ -206,7 +206,7 @@ python app/content_manager.py regenerate -s {host}
 ```
 
 ### Multiple Sites
-Managing multiple sites on the same machine is pretty simple.
+Managing multiple sites on the same machine is pretty simple (you can host them on different servers if you prefer).
 
 **1. Create a new site on your server**
 ```

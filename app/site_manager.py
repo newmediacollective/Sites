@@ -23,18 +23,22 @@ sites_dir = join(app_dir, "sites")
 def create(sitename, title, description):
     if not exists(sites_dir):
         os.makedirs(sites_dir)
-        secret_path = join(sites_dir, "secret.txt")
-
-        try:
-            check_call(f"openssl rand -base64 32 > {secret_path}", stderr = PIPE, shell = True)
-        except Exception as error:
-            sys.exit(error)
 
     site_dir = join(sites_dir, sitename)
 
     if exists(site_dir):
         print(f"Error: {sitename} already exists")
         sys.exit(2)
+
+    #
+    # Secret
+    #
+    secret_path = join(site_dir, "secret.txt")
+
+    try:
+        check_call(f"openssl rand -base64 32 > {secret_path}", stderr = PIPE, shell = True)
+    except Exception as error:
+        sys.exit(error)
 
     #
     # Templates

@@ -18,11 +18,8 @@ app = Flask(__name__)
 # Constants
 #
 
+sites_dir = join(app.root_path, "sites")
 tmp_dir = join(app.root_path, ".tmp")
-secret_path = join(app.root_path, "sites/secret.txt")
-
-with open(secret_path, "r") as secret_file:
-    secret = secret_file.read().strip()
 
 #
 # Routes
@@ -36,6 +33,10 @@ def handle_400(error):
 def handle_401(error):
     return ({ "error": "unauthorized" }, 401)
 
+@app.errorhandler(500)
+def handle_500(error):
+    return ({ "error": "internal server error" }, 500)
+
 @app.route("/posts", methods=["POST"])
 def handle_post():
     if app.debug:
@@ -47,6 +48,17 @@ def handle_post():
         if not bearer:
             abort(401)
 
+        host = request.host
+
+        site_dir = join(sites_dir, host)
+        secret_path = join(site_dir, "secret.txt")
+
+        with open(secret_path, "r") as secret_file:
+            secret = secret_file.read().strip()
+
+        if not secret:
+            abort(500)
+
         try:
             token = bearer.split()[-1]
             payload = jwt.decode(token, secret, algorithms=["HS256"])
@@ -54,7 +66,7 @@ def handle_post():
             abort(401)
 
         sitename = payload.get("sitename")
-        if sitename != request.host:
+        if sitename != host:
             abort(401)
 
     if not request.form or not request.files:
