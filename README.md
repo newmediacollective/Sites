@@ -159,12 +159,12 @@ To post locally in debug mode, use:
 ./scripts/post_local.sh {host} /path/to/image.jpg "caption"
 ```
 
-To post to your server, first pull the secret if you don't have it in `app/sites/secret.txt`:
+To post to your server, first sync the site down (if it's not already):
 ```
-./scripts/pull_secret.sh {host}
+./scripts/pull.sh {host}
 ```
 
-Then verify we can create a token from it:
+Then verify we can create a token from the secret for the site:
 ```
 pyjwt --key=$(cat app/sites/{host}/secret.txt) encode sitename={host}
 ```
