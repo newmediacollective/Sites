@@ -153,3 +153,10 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+/*
+  Link Styling
+*/
+a {
+  text-decoration: none;
+}
