@@ -29,6 +29,8 @@ def create(sitename, title, description):
     if exists(site_dir):
         print(f"Error: {sitename} already exists")
         sys.exit(2)
+    else:
+        os.mkdir(site_dir)
 
     #
     # Secret
