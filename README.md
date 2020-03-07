@@ -3,7 +3,7 @@ A set of tools to manage photo stream sites.
 
 In a few minutes you can have your own HTTPS, responsive site that you can post photos to from anywhere.
 
-As an example, here's [my site](https://christianbator.com) managed with these tools.
+As an example, here's [my site](https://wheresben.today) managed with these tools.
 
 ## Getting Started
 Follow along with the instructions below to get started.
@@ -156,7 +156,8 @@ open app/sites/{host}/content/views/index.html
 ### Posting
 To post locally in debug mode, use:
 ```
-./scripts/post_local.sh {host} /path/to/image.jpg "caption" "location"
+./scripts/post_image_local.sh {host} /path/to/image.jpg "caption" "location"
+./scripts/post_text_local.sh {host} /path/to/text.txt  "location"
 ```
 
 To post to your server, first sync the site down (if it's not already):
@@ -169,9 +170,10 @@ Then verify we can create a token from the secret for the site:
 pyjwt --key=$(cat app/sites/{host}/secret.txt) encode sitename={host}
 ```
 
-Then you can use the helper script to post images:
+Then you can use the helper script to post images and text:
 ```
-./scripts/post.sh {host} /path/to/image.jpg "caption" "location"
+./scripts/post_image.sh {host} /path/to/image.jpg "caption" "location"
+./scripts/post_text.sh {host} /path/to/text.txt  "location"
 ```
 
 Under the hood, it's just an HTTP POST request to `https://{host}/posts`, meaning you can use that token to post images from anywhere:

@@ -72,36 +72,43 @@ def handle_post():
     if not request.form or not request.files:
         abort(400)
 
-    image = request.files.get("image")
-    if not image:
+    post_type = request.form.get("post_type")
+    if (not post_type) or (post_type not in ["image", "text"]):
         abort(400)
 
-    caption = request.form.get("caption")
-    if not caption:
+    content = request.files.get("content")
+    if not content:
         abort(400)
 
     location = request.form.get("location")
     if not location:
         abort(400)
 
-    # Save image to temporary file
+    # Save content to temporary file
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
 
-    tmp_image_path = join(tmp_dir, image.filename)
-    image.save(tmp_image_path)
+    tmp_content_path = join(tmp_dir, content.filename)
+    content.save(tmp_content_path)
 
     # Create post
     content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
 
     try:
-        post = content_manager.create_post(image_path = tmp_image_path, caption = caption, location = location)
+        if post_type == "image":
+            caption = request.form.get("caption")
+            if not caption:
+                abort(400)
+
+            post = content_manager.create_image_post(image_path = tmp_content_path, caption = caption, location = location)
+        elif post_type == "text":
+            post = content_manager.create_text_post(text_file_path = tmp_content_path, location = location)
     except Exception as error:
         print(error)
         abort(500)
 
     # Clean up temporary file
-    os.remove(tmp_image_path)
+    os.remove(tmp_content_path)
 
     # Respond
     return (post.to_json(), 201)

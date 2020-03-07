@@ -6,18 +6,20 @@ import os
 import sys
 import json
 import getopt
+import shutil
 
 from subprocess import check_call, PIPE
 from os.path import splitext, join, exists, dirname
 from uuid import uuid4
 from datetime import datetime
-from post import Post
+from post import Post, ImagePost, TextPost
 
 #
 # Constants
 #
 
 image_file_extension = ".jpg"
+text_file_extension = ".txt"
 
 #
 # ContentManager
@@ -36,13 +38,14 @@ class ContentManager:
         self.data_dir = join(self.site_dir, "data")
         self.properties_path = join(self.data_dir, "properties.json")
         self.posts_path = join(self.data_dir, "posts.json")
+        self.text_files_dir = join(self.data_dir, "text_files")
 
         self.content_dir = join(self.site_dir, "content")
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
         self.index_path = join(self.views_dir, "index.html")
 
-    def create_post(self, image_path, caption, location):
+    def create_image_post(self, image_path, caption, location):
         # Optimize image
         image_identifier = str(uuid4())
         optimized_image_filename = image_identifier + image_file_extension
@@ -52,8 +55,28 @@ class ContentManager:
 
         # Create post
         date = datetime.now().strftime("%b %-d, %Y")
-        post = Post(image_filename = optimized_image_filename, caption = caption, date = date, location = location)
+        post = ImagePost(content_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
+        # Add post
+        self.add_post_and_update(post)
+        return post
+
+    def create_text_post(self, text_file_path, location):
+        # Move the text file over
+        text_file_identifier = str(uuid4())
+        final_text_file_name = text_file_identifier + text_file_extension
+        final_text_file_path = join(self.text_files_dir, final_text_file_name)
+        shutil.copy(text_file_path, final_text_file_path)
+
+        # Create post
+        date = datetime.now().strftime("%b %-d, %Y")
+        post = TextPost(text_files_dir = self.text_files_dir, content_filename = final_text_file_name, date = date, location = location)
+
+        # Add post
+        self.add_post_and_update(post)
+        return post
+
+    def add_post_and_update(self, post):
         # Update posts
         posts = self.get_posts()
         posts.insert(0, post)
@@ -64,9 +87,6 @@ class ContentManager:
 
         # Hydrate templates
         self.hydrate_templates()
-
-        # Return the new post
-        return post
 
     def hydrate_templates(self):
         properties = self.get_properties()
@@ -107,7 +127,7 @@ class ContentManager:
 
         if exists(self.posts_path):
             with open(self.posts_path, "r") as posts_file:
-                posts = [Post.from_json(post_json = post_json) for post_json in json.load(posts_file)]
+                posts = [Post.from_json(text_files_dir = self.text_files_dir, post_json = post_json) for post_json in json.load(posts_file)]
 
         return posts
 
