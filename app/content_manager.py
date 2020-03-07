@@ -42,7 +42,7 @@ class ContentManager:
         self.images_dir = join(self.content_dir, "images")
         self.index_path = join(self.views_dir, "index.html")
 
-    def create_post(self, image_path, caption):
+    def create_post(self, image_path, caption, location):
         # Optimize image
         image_identifier = str(uuid4())
         optimized_image_filename = image_identifier + image_file_extension
@@ -51,8 +51,8 @@ class ContentManager:
         check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
-        date = datetime.now().strftime("(%b %-d %Y)")
-        post = Post(image_filename = optimized_image_filename, caption = caption, date = date)
+        date = datetime.now().strftime("%b %-d, %Y")
+        post = Post(image_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Update posts
         posts = self.get_posts()
@@ -107,7 +107,7 @@ class ContentManager:
 
         if exists(self.posts_path):
             with open(self.posts_path, "r") as posts_file:
-                posts = [Post.from_json(json = post_json) for post_json in json.load(posts_file)]
+                posts = [Post.from_json(post_json = post_json) for post_json in json.load(posts_file)]
 
         return posts
 

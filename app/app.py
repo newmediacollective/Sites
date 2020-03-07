@@ -73,14 +73,16 @@ def handle_post():
         abort(400)
 
     image = request.files.get("image")
-
     if not image:
         abort(400)
 
     caption = request.form.get("caption")
-
     if not caption:
-        caption = ""
+        abort(400)
+
+    location = request.form.get("location")
+    if not location:
+        abort(400)
 
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
@@ -93,7 +95,7 @@ def handle_post():
     content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
 
     try:
-        post = content_manager.create_post(image_path = tmp_image_path, caption = caption)
+        post = content_manager.create_post(image_path = tmp_image_path, caption = caption, location = location)
     except Exception as error:
         print(error)
         abort(500)

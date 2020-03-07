@@ -156,7 +156,7 @@ open app/sites/{host}/content/views/index.html
 ### Posting
 To post locally in debug mode, use:
 ```
-./scripts/post_local.sh {host} /path/to/image.jpg "caption"
+./scripts/post_local.sh {host} /path/to/image.jpg "caption" "location"
 ```
 
 To post to your server, first sync the site down (if it's not already):
@@ -171,18 +171,18 @@ pyjwt --key=$(cat app/sites/{host}/secret.txt) encode sitename={host}
 
 Then you can use the helper script to post images:
 ```
-./scripts/post.sh {host} /path/to/image.jpg "caption"
+./scripts/post.sh {host} /path/to/image.jpg "caption" "location"
 ```
 
 Under the hood, it's just an HTTP POST request to `https://{host}/posts`, meaning you can use that token to post images from anywhere:
 ```
-curl -i -H "Authorization: Bearer token" -F "image=@/path/to/image" -F "caption=caption" https://{host}/posts
+curl -i -H "Authorization: Bearer token" -F "image=@/path/to/image" -F "caption=caption" -F "location=location" https://{host}/posts
 ```
 
 ### Icons
 Fill in the `app/sites/{host}/content/icons` directory with the following files so your site will automatically serve a favicon and apple touch icon:
 ```
-icon.png (64x64)
+favicon.png (64x64)
 apple-touch-icon.png (180x180)
 ```
 
