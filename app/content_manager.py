@@ -54,7 +54,7 @@ class ContentManager:
         check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
-        date = datetime.now().strftime("%b %-d, %Y")
+        date = datetime.now().strftime("%B %-d, %Y")
         post = ImagePost(content_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Add post
@@ -66,10 +66,11 @@ class ContentManager:
         text_file_identifier = str(uuid4())
         final_text_file_name = text_file_identifier + text_file_extension
         final_text_file_path = join(self.text_files_dir, final_text_file_name)
+        os.makedirs(self.text_files_dir, exist_ok=True)
         shutil.copy(text_file_path, final_text_file_path)
 
         # Create post
-        date = datetime.now().strftime("%b %-d, %Y")
+        date = datetime.now().strftime("%B %-d, %Y")
         post = TextPost(text_files_dir = self.text_files_dir, content_filename = final_text_file_name, date = date, location = location)
 
         # Add post
