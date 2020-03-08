@@ -14,12 +14,15 @@ from uuid import uuid4
 from datetime import datetime
 from post import Post, ImagePost, TextPost
 
+from text_render import render_text_file
+
 #
 # Constants
 #
 
 image_file_extension = ".jpg"
 text_file_extension = ".txt"
+rendered_text_file_extension = ".html"
 
 #
 # ContentManager
@@ -38,11 +41,12 @@ class ContentManager:
         self.data_dir = join(self.site_dir, "data")
         self.properties_path = join(self.data_dir, "properties.json")
         self.posts_path = join(self.data_dir, "posts.json")
-        self.text_files_dir = join(self.data_dir, "text_files")
+        self.text_posts_dir = join(self.data_dir, "text_posts")
 
         self.content_dir = join(self.site_dir, "content")
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
+        self.rendered_text_posts_dir = join(self.content_dir, "text_posts")
         self.index_path = join(self.views_dir, "index.html")
 
     def create_image_post(self, image_path, caption, location):
@@ -55,23 +59,30 @@ class ContentManager:
 
         # Create post
         date = datetime.now().strftime("%B %-d, %Y")
-        post = ImagePost(content_filename = optimized_image_filename, caption = caption, date = date, location = location)
+        post = ImagePost(image_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
         return post
 
     def create_text_post(self, text_file_path, location):
-        # Move the text file over
         text_file_identifier = str(uuid4())
-        final_text_file_name = text_file_identifier + text_file_extension
-        final_text_file_path = join(self.text_files_dir, final_text_file_name)
-        os.makedirs(self.text_files_dir, exist_ok=True)
-        shutil.copy(text_file_path, final_text_file_path)
+        os.makedirs(self.text_posts_dir, exist_ok=True)
+        os.makedirs(self.rendered_text_posts_dir, exist_ok=True)
+
+        # Copy the original text file to the text_posts directory
+        original_text_file_name = text_file_identifier + text_file_extension
+        original_text_file_path = join(self.text_posts_dir, original_text_file_name)
+        shutil.copy(text_file_path, original_text_file_path)
+
+        # Render the text file
+        rendered_text_file_name = text_file_identifier + rendered_text_file_extension
+        rendered_text_file_path = join(self.rendered_text_posts_dir, rendered_text_file_name)
+        render_text_file(text_file_path, rendered_text_file_path)
 
         # Create post
         date = datetime.now().strftime("%B %-d, %Y")
-        post = TextPost(text_files_dir = self.text_files_dir, content_filename = final_text_file_name, date = date, location = location)
+        post = TextPost(text_posts_dir = self.rendered_text_posts_dir, text_file_name = rendered_text_file_name, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -128,7 +139,7 @@ class ContentManager:
 
         if exists(self.posts_path):
             with open(self.posts_path, "r") as posts_file:
-                posts = [Post.from_json(text_files_dir = self.text_files_dir, post_json = post_json) for post_json in json.load(posts_file)]
+                posts = [Post.from_json(text_posts_dir = self.rendered_text_posts_dir, post_json = post_json) for post_json in json.load(posts_file)]
 
         return posts
 
