@@ -20,7 +20,7 @@ sites_dir = join(app_dir, "sites")
 #
 # Methods
 #
-def create(sitename, title, description):
+def create(sitename, title, description, date_format):
     if not exists(sites_dir):
         os.makedirs(sites_dir)
 
@@ -76,7 +76,8 @@ def create(sitename, title, description):
     with open(join(data_dir, "properties.json"), "w") as properties_file:
         properties = {
             "title": title,
-            "description": description
+            "description": description,
+            "date_format": date_format
         }
 
         json.dump(properties, properties_file, sort_keys = True, indent = 4)
@@ -103,7 +104,7 @@ def update_nginx():
 
 def main(argv):
     usage = "Usage:\n"
-    usage += "> python3 site_manager.py create -s sitename -t title -d description"
+    usage += "> python3 site_manager.py create -s sitename -t title -d description -f date_format"
     usage += "> python3 site_manager.py update_nginx"
 
     if len(argv) == 0:
@@ -114,9 +115,10 @@ def main(argv):
     sitename = None
     title = None
     description = None
+    date_format = "(%b %-d %Y)"
 
     try:
-        opts, args = getopt.getopt(argv[1:],"s:t:d:")
+        opts, args = getopt.getopt(argv[1:],"s:t:d:f:")
     except getopt.GetoptError:
         print(usage)
         sys.exit(2)
@@ -128,6 +130,8 @@ def main(argv):
             title = arg
         elif opt == "-d":
             description = arg
+        elif opt == "-f":
+            date_format = arg
         else:
             print(f"Error: unrecognized option\n{usage}")
             sys.exit(2)
@@ -136,7 +140,7 @@ def main(argv):
         print(usage)
         sys.exit()
     elif action_name == "create":
-        create(sitename = sitename, title = title, description = description)
+        create(sitename = sitename, title = title, description = description, date_format = date_format)
     elif action_name == "update_nginx":
         update_nginx()
     else:

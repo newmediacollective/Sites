@@ -56,7 +56,9 @@ class ContentManager:
         check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
-        date = datetime.now().strftime("%B %-d, %Y")
+        properties = self.get_properties()
+        date_format = properties["date_format"]
+        date = datetime.now().strftime(date_format)
         post = ImagePost(post_id = str(uuid4()), image_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Add post
@@ -72,7 +74,9 @@ class ContentManager:
         shutil.copy(text_file_path, copied_text_file_path)
 
         # Create post
-        date = datetime.now().strftime("%B %-d, %Y")
+        properties = self.get_properties()
+        date_format = properties["date_format"]
+        date = datetime.now().strftime(date_format)
         post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_file_name = copied_text_file_name, date = date, location = location)
 
         # Add post
@@ -146,11 +150,20 @@ def create(content_manager, argv):
     content_file_path = argv[1]
 
     if post_type == "image":
-        caption = bullet.Input("Caption: ").launch()
-        location = bullet.Input("Location: ").launch()
+        caption = input("Caption: ")
+        if len(caption) == 0:
+            caption = None
+
+        location = input("Location: ")
+        if len(location) == 0:
+            location = None
+
         content_manager.create_image_post(content_file_path, caption, location)
     elif post_type == "text":
-        location = bullet.Input("Location: ").launch()
+        location = input("Location: ")
+        if len(location) == 0:
+            location = None
+
         content_manager.create_text_post(content_file_path, location)
     else:
         fuck_off()
