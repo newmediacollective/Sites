@@ -136,6 +136,14 @@ body {
   margin-right: auto;
 }
 
+.text_post div {
+    margin-bottom: 5pt;
+}
+
+p.md_header {
+    font-weight: bold;
+}
+
 /*
   Image Styling
 */

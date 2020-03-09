@@ -132,7 +132,7 @@ class TextPost(Post):
 
         html = f"""
     <div class="text_post" id="{self.post_id}">
-        <p class="text">{parsed_text}</p>
+        <div class="text">{parsed_text}</div>
     """
 
         if self.location:
