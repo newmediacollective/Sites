@@ -50,7 +50,7 @@ class ContentManager:
     def create_image_post(self, image_path, caption, location):
         # Optimize image
         image_id = str(uuid4())
-        optimized_image_filename = image_identifier + image_file_extension
+        optimized_image_filename = image_id + image_file_extension
         optimized_image_path = join(self.images_dir, optimized_image_filename)
 
         check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
@@ -64,16 +64,16 @@ class ContentManager:
         return post
 
     def create_text_post(self, text_file_path, location):
-        text_file_identifier = str(uuid4())
+        text_file_id = str(uuid4())
 
         # Copy the original text file to the text_posts directory
-        copied_text_file_name = text_file_identifier + text_file_extension
-        copied_text_file_path = join(self.text_posts_dir, copied_text_file_name)
+        copied_text_filename = text_file_id + text_file_extension
+        copied_text_file_path = join(self.text_posts_dir, copied_text_filename)
         shutil.copy(text_file_path, copied_text_file_path)
 
         # Create post
         date = datetime.now().strftime("%B %-d, %Y")
-        post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_file_name = copied_text_file_name, date = date, location = location)
+        post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_filename = copied_text_filename, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -89,6 +89,34 @@ class ContentManager:
             json.dump(post_json, posts_file, sort_keys = True, indent = 4)
 
         # Hydrate templates
+        self.hydrate_templates()
+
+    def find_post(self, post_id):
+        posts = self.get_posts()
+
+        for post in posts:
+            if post.post_id == post_id:
+                return post
+
+        return None
+        
+    def delete_post(self, post):
+        if type(post) == ImagePost:
+            content_file_path = join(self.images_dir, post.image_filename)
+        elif type(post) == TextPost:
+            content_file_path = join(self.text_posts_dir, post.text_filename)
+        else:
+            raise TypeError("Unknown post type")
+
+        os.remove(content_file_path)
+
+        posts = self.get_posts()
+        posts = filter(lambda x: (x.post_id != post.post_id), posts)
+
+        post_json = [post.to_json() for post in posts]
+        with open(self.posts_path, "w") as posts_file:
+            json.dump(post_json, posts_file, sort_keys = True, indent = 4)
+
         self.hydrate_templates()
 
     def hydrate_templates(self):
@@ -170,11 +198,19 @@ def delete(content_manager, argv):
         fuck_off()
 
     post_id = argv[0]
+    post = content_manager.find_post(post_id)
 
-    # TODO
-    #  - Find the post
-    #  - Ask the user if they're serious
-    #  - Delete the post
+    if post is None:
+        print("Unknown post")
+        return
+
+    sure = bullet.YesNo("Are you sure? ").launch()
+
+    if sure:
+        content_manager.delete_post(post)
+        print("Post deleted")
+    else:
+        print("Aborting")
 
 def generate(content_manager, argv):
     content_manager.hydrate_templates()

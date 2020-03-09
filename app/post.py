@@ -98,11 +98,11 @@ class ImagePost(Post):
 #
 
 class TextPost(Post):
-    def __init__(self, post_id, text_posts_dir, text_file_name, date, location):
+    def __init__(self, post_id, text_posts_dir, text_filename, date, location):
         super().__init__(post_id)
 
         self.text_posts_dir = text_posts_dir
-        self.text_file_name = text_file_name
+        self.text_filename = text_filename
         self.date = date
         self.location = location
 
@@ -111,7 +111,7 @@ class TextPost(Post):
         return TextPost(
             post_id = post_json["id"],
             text_posts_dir = text_posts_dir,
-            text_file_name = post_json["text_file_name"],
+            text_filename = post_json["text_filename"],
             date = post_json["date"],
             location = post_json.get("location")
         )
@@ -120,13 +120,13 @@ class TextPost(Post):
         return {
             "id": self.post_id,
             "type": "text",
-            "text_file_name": self.text_file_name,
+            "text_filename": self.text_filename,
             "date": self.date,
             "location": self.location,
         }
 
     def to_html(self):
-        with open(join(self.text_posts_dir, self.text_file_name), "r") as text_file:
+        with open(join(self.text_posts_dir, self.text_filename), "r") as text_file:
             text = text_file.read()
             parsed_text = parse_markdown(text)
 
