@@ -6,12 +6,17 @@ import abc
 import json
 
 from os.path import join
+from markdown_parser import parse_markdown
 
 #
 # Post Abstract Base Class
 #
 
 class Post(abc.ABC):
+
+    def __init__(self, post_id):
+        self.post_id = post_id
+
     @staticmethod
     def from_json(text_posts_dir, post_json):
         post_type = post_json["type"]
@@ -39,7 +44,8 @@ class Post(abc.ABC):
 #
 
 class ImagePost(Post):
-    def __init__(self, image_filename, caption, date, location):
+    def __init__(self, post_id, image_filename, caption, date, location):
+        super().__init__(post_id)
         self.image_filename = image_filename
         self.caption = caption
         self.date = date
@@ -48,14 +54,16 @@ class ImagePost(Post):
     @staticmethod
     def from_json(post_json):
         return ImagePost(
+            post_id = post_json["id"],
             image_filename = post_json["image_filename"],
-            caption = post_json["caption"],
+            caption = post_json.get("caption"),
             date = post_json["date"],
-            location = post_json["location"]
+            location = post_json.get("location")
         )
 
     def to_json(self):
         return {
+            "id": self.post_id,
             "type": "image",
             "image_filename": self.image_filename,
             "caption": self.caption,
@@ -64,14 +72,25 @@ class ImagePost(Post):
         }
 
     def to_html(self):
-        return f"""
-    <div class="post">
+        html = f"""
+    <div class="image_post" id="{self.post_id}">
         <a href="../images/{self.image_filename}">
             <img src="../images/{self.image_filename}" alt="">
         </a>
+        """
+
+        if self.caption:
+            html += f"""
         <p class="caption">{self.caption}</p>
-        <p class="date">{self.date}</p>
+    """
+
+        if self.location:
+            html += f"""
         <p class="location">{self.location}</p>
+    """
+
+        return html + f"""
+        <p class="date">{self.date}</p>
     </div>"""
 
 #
@@ -79,7 +98,9 @@ class ImagePost(Post):
 #
 
 class TextPost(Post):
-    def __init__(self, text_posts_dir, text_file_name, date, location):
+    def __init__(self, post_id, text_posts_dir, text_file_name, date, location):
+        super().__init__(post_id)
+
         self.text_posts_dir = text_posts_dir
         self.text_file_name = text_file_name
         self.date = date
@@ -88,14 +109,16 @@ class TextPost(Post):
     @staticmethod
     def from_json(text_posts_dir, post_json):
         return TextPost(
+            post_id = post_json["id"],
             text_posts_dir = text_posts_dir,
             text_file_name = post_json["text_file_name"],
             date = post_json["date"],
-            location = post_json["location"]
+            location = post_json.get("location")
         )
 
     def to_json(self):
         return {
+            "id": self.post_id,
             "type": "text",
             "text_file_name": self.text_file_name,
             "date": self.date,
@@ -105,10 +128,18 @@ class TextPost(Post):
     def to_html(self):
         with open(join(self.text_posts_dir, self.text_file_name), "r") as text_file:
             text = text_file.read()
+            parsed_text = parse_markdown(text)
 
-        return f"""
-    <div class="post">
-        <p class="text">{text}</p>
-        <p class="date">{self.date}</p>
+        html = f"""
+    <div class="text_post" id="{self.post_id}">
+        <p class="text">{parsed_text}</p>
+    """
+
+        if self.location:
+            html += f"""
         <p class="location">{self.location}</p>
+        """
+
+        return html + f"""
+        <p class="date">{self.date}</p>
     </div>"""

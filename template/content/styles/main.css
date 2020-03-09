@@ -41,60 +41,95 @@ body {
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-  .post {
+  .image_post {
     width: 80%;
   }
 
-  .post .caption {
+  .text_post {
+    max-width: 80%;
+  }
+
+  .image_post .caption {
     max-width: 100%;
   }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
-  .post {
-    width: 60%;
+  .image_post {
+    width: 80%;
   }
 
-  .post .caption {
+  .text_post {
+    max-width: 80%;
+  }
+
+  .image_post .caption {
     max-width: 100%;
   }
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-  .post {
-    width: 60%;
+  .image_post {
+    width: 80%;
   }
 
-  .post .caption {
+  .text_post {
+    max-width: 60%;
+  }
+
+  .image_post .caption {
     max-width: 60%;
   }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-  .post {
-    width: 40%;
+  .image_post {
+    width: 60%;
   }
 
-  .post .caption {
+  .text_post {
     max-width: 40%;
+  }
+
+  .image_post .caption {
+    max-width: 60%;
   }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-  .post {
-    width: 40%;
+  .image_post {
+    width: 60%;
   }
 
-  .post .caption {
-    max-width: 40%;
+  .text_post {
+    max-width: 30%;
+  }
+
+  .image_post .caption {
+    max-width: 60%;
   }
 }
 
-.post {
+.image_post {
+  margin-top: 0;
+  margin-bottom: 45pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*
+  Text Styling
+*/
+.text_post {
+  display: block;
+  font-size: small;
+  color: #595959;
+  text-align: left;
+  line-height: 1.5;
   margin-top: 0;
   margin-bottom: 45pt;
   margin-left: auto;
@@ -104,24 +139,9 @@ body {
 /*
   Image Styling
 */
-.post img {
+.image_post img {
   display: block;
-  max-width: 100%;
-  margin-top: 0;
-  margin-bottom: 15pt;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 5pt;
-}
-
-/*
-  Text Styling
-*/
-.post .text {
-  display: block;
-  font-size: small;
-  color: #595959;
-  line-height: 1.5;
+  max-height: 380pt;
   max-width: 100%;
   margin-top: 0;
   margin-bottom: 15pt;
@@ -132,7 +152,7 @@ body {
 /*
   Caption Styling
 */
-.post .caption {
+.image_post .caption {
   display: block;
   font-size: small;
   color: #595959;
@@ -145,22 +165,22 @@ body {
 }
 
 /*
-  Date Styling
+  Location Styling
 */
-.post .date {
+.location {
   font-size: small;
   color: #999999;
   text-align: center;
   margin-top: 0;
-  margin-bottom: 2pt;
+  margin-bottom: 5pt;
   margin-left: 0;
   margin-right: 0;
 }
 
 /*
-  Location Styling
+  Date Styling
 */
-.post .location {
+.date {
   font-size: small;
   color: #999999;
   text-align: center;

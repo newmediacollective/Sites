@@ -56,9 +56,15 @@ def handle_post_image():
     if not caption:
         abort(400)
 
+    if len(caption) == 0:
+        caption = None
+
     location = request.form.get("location")
     if not location:
         abort(400)
+
+    if len(location) == 0:
+        location = None
 
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
@@ -96,9 +102,15 @@ def handle_post_text():
     if not text:
         abort(400)
 
+    if len(text) == 0:
+        abort(400)
+
     location = request.form.get("location")
     if not location:
         abort(400)
+
+    if len(location) == 0:
+        location = None
 
     # Save text to temporary file
     if not os.path.exists(tmp_dir):

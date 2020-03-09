@@ -16,15 +16,12 @@ from post import Post, ImagePost, TextPost
 
 import bullet
 
-from text_render import render_text_file
-
 #
 # Constants
 #
 
 image_file_extension = ".jpg"
-text_file_extension = ".txt"
-rendered_text_file_extension = ".html"
+text_file_extension = ".md"
 
 #
 # ContentManager
@@ -48,12 +45,11 @@ class ContentManager:
         self.content_dir = join(self.site_dir, "content")
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
-        self.rendered_text_posts_dir = join(self.content_dir, "text_posts")
         self.index_path = join(self.views_dir, "index.html")
 
     def create_image_post(self, image_path, caption, location):
         # Optimize image
-        image_identifier = str(uuid4())
+        image_id = str(uuid4())
         optimized_image_filename = image_identifier + image_file_extension
         optimized_image_path = join(self.images_dir, optimized_image_filename)
 
@@ -61,7 +57,7 @@ class ContentManager:
 
         # Create post
         date = datetime.now().strftime("%B %-d, %Y")
-        post = ImagePost(image_filename = optimized_image_filename, caption = caption, date = date, location = location)
+        post = ImagePost(post_id = str(uuid4()), image_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -69,22 +65,15 @@ class ContentManager:
 
     def create_text_post(self, text_file_path, location):
         text_file_identifier = str(uuid4())
-        os.makedirs(self.text_posts_dir, exist_ok=True)
-        os.makedirs(self.rendered_text_posts_dir, exist_ok=True)
 
         # Copy the original text file to the text_posts directory
-        original_text_file_name = text_file_identifier + text_file_extension
-        original_text_file_path = join(self.text_posts_dir, original_text_file_name)
-        shutil.copy(text_file_path, original_text_file_path)
-
-        # Render the text file
-        rendered_text_file_name = text_file_identifier + rendered_text_file_extension
-        rendered_text_file_path = join(self.rendered_text_posts_dir, rendered_text_file_name)
-        render_text_file(text_file_path, rendered_text_file_path)
+        copied_text_file_name = text_file_identifier + text_file_extension
+        copied_text_file_path = join(self.text_posts_dir, copied_text_file_name)
+        shutil.copy(text_file_path, copied_text_file_path)
 
         # Create post
         date = datetime.now().strftime("%B %-d, %Y")
-        post = TextPost(text_posts_dir = self.rendered_text_posts_dir, text_file_name = rendered_text_file_name, date = date, location = location)
+        post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_file_name = copied_text_file_name, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -141,20 +130,13 @@ class ContentManager:
 
         if exists(self.posts_path):
             with open(self.posts_path, "r") as posts_file:
-                posts = [Post.from_json(text_posts_dir = self.rendered_text_posts_dir, post_json = post_json) for post_json in json.load(posts_file)]
+                posts = [Post.from_json(text_posts_dir = self.text_posts_dir, post_json = post_json) for post_json in json.load(posts_file)]
 
         return posts
 
 #
 # Command Line Interface
 #
-
-# usage  = "Usage:\n"
-# usage += "    python3 content_manager.py <sitename> create <image | text> <content_file_path>\n"
-# usage += "    python3 content_manager.py <sitename> update <post_id>\n"
-# usage += "    python3 content_manager.py <sitename> delete <post_id>\n"
-# usage += "    python3 content_manager.py <sitename> generate\n"
-# usage += "    python3 content_manager.py <sitename> push\n"
 
 def create(content_manager, argv):
     if len(argv) < 2:

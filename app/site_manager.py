@@ -81,6 +81,8 @@ def create(sitename, title, description):
 
         json.dump(properties, properties_file, sort_keys = True, indent = 4)
 
+    os.makedirs(join(data_dir, "text_posts"))
+
 def update_nginx():
     with open(join(app_dir, "../template/config/server.conf"), "r") as server_block_template_file:
         server_block_template = server_block_template_file.read()
