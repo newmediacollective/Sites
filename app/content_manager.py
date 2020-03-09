@@ -14,6 +14,8 @@ from uuid import uuid4
 from datetime import datetime
 from post import Post, ImagePost, TextPost
 
+import bullet
+
 from text_render import render_text_file
 
 #
@@ -144,42 +146,90 @@ class ContentManager:
         return posts
 
 #
-# Main
+# Command Line Interface
 #
 
-def regenerate(sitename):
-    app_dir = dirname(os.path.realpath(__file__))
-    content_manager = ContentManager(app_dir = app_dir, sitename = sitename)
+# usage  = "Usage:\n"
+# usage += "    python3 content_manager.py <sitename> create <image | text> <content_file_path>\n"
+# usage += "    python3 content_manager.py <sitename> update <post_id>\n"
+# usage += "    python3 content_manager.py <sitename> delete <post_id>\n"
+# usage += "    python3 content_manager.py <sitename> generate\n"
+# usage += "    python3 content_manager.py <sitename> push\n"
+
+def create(content_manager, argv):
+    if len(argv) < 2:
+        fuck_off()
+
+    post_type = argv[0]
+    content_file_path = argv[1]
+
+    if post_type == "image":
+        caption = bullet.Input("Caption: ").launch()
+        location = bullet.Input("Location: ").launch()
+        content_manager.create_image_post(content_file_path, caption, location)
+    elif post_type == "text":
+        location = bullet.Input("Location: ").launch()
+        content_manager.create_text_post(content_file_path, location)
+    else:
+        fuck_off()
+
+def update(content_manager, argv):
+    if len(argv) < 1:
+        fuck_off()
+
+    post_id = argv[0]
+
+    # TODO
+    #  - Find the post
+    #  - Ask if the user wants to edit the caption, location, or text (in the case of a text post)
+
+def delete(content_manager, argv):
+    if len(argv) < 1:
+        fuck_off()
+
+    post_id = argv[0]
+
+    # TODO
+    #  - Find the post
+    #  - Ask the user if they're serious
+    #  - Delete the post
+
+def generate(content_manager, argv):
     content_manager.hydrate_templates()
 
 def main(argv):
-    usage = "Usage: python3 content_manager.py regenerate -s sitename (e.g. google.com)"
+    if len(argv) < 2:
+        fuck_off()
 
-    if len(argv) == 0:
-        print(usage)
-        sys.exit(2)
+    sitename = argv[0]
+    action = argv[1]
 
-    action_name = argv[0]
-    sitename = None
+    app_dir = dirname(os.path.realpath(__file__))
+    content_manager = ContentManager(app_dir = app_dir, sitename = sitename)
 
-    try:
-        opts, args = getopt.getopt(argv[1:],"s:")
-    except getopt.GetoptError:
-        print(usage)
-        sys.exit(2)
-
-    for opt, arg in opts:
-        if opt == "-s":
-            sitename = arg
-
-    if action_name == "help":
-        print(usage)
-        sys.exit()
-    elif action_name == "regenerate":
-        regenerate(sitename = sitename)
+    if action == "create":
+        create(content_manager, argv[2:])
+    elif action == "update":
+        update(content_manager, argv[2:])
+    elif action == "delete":
+        delete(content_manager, argv[2:])
+    elif action == "generate":
+        generate(content_manager, argv[2:])
+    elif action == "push":
+        push(content_manager, argv[2:])
     else:
-        print(f"Error: unrecognized action\n{usage}")
-        sys.exit(2)
+        fuck_off()
+
+def fuck_off():
+    usage  = "Usage:\n"
+    usage += "    python3 content_manager.py <sitename> create <text | image> <content_file_path>\n"
+    usage += "    python3 content_manager.py <sitename> update <post_id>\n"
+    usage += "    python3 content_manager.py <sitename> delete <post_id>\n"
+    usage += "    python3 content_manager.py <sitename> generate\n"
+    usage += "    python3 content_manager.py <sitename> push\n"
+
+    print(usage)
+    sys.exit(2)
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])
