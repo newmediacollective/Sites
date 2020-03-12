@@ -6,8 +6,10 @@ import re
 
 from flask import escape
 
-
 def parse_markdown(markdown):
+    # Escape HTML-unsafe text
+    markdown = str(escape(markdown))
+
     # Replace newlines
     parsed_text = markdown.replace("\n\n", "\n<br><br>\n")
 

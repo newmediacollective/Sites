@@ -123,6 +123,21 @@ class ContentManager:
 
         self.hydrate_templates()
 
+    def update_post(self, post):
+        posts = self.get_posts()
+
+        for i, existing_post in enumerate(posts):
+            if existing_post.post_id == post.post_id:
+                posts[i] = post
+                break
+
+        post_json = [post.to_json() for post in posts]
+
+        with open(self.posts_path, "w") as posts_file:
+            json.dump(post_json, posts_file, sort_keys = True, indent = 4)
+
+        self.hydrate_templates()
+
     def hydrate_templates(self):
         properties = self.get_properties()
 
@@ -201,10 +216,38 @@ def update(content_manager, argv):
         fuck_off()
 
     post_id = argv[0]
+    post = content_manager.find_post(post_id)
 
-    # TODO
-    #  - Find the post
-    #  - Ask if the user wants to edit the caption, location, or text (in the case of a text post)
+    if post is None:
+        print("Unknown post")
+        return
+
+    if type(post) == ImagePost:
+        choices = ["Caption", "Location"]
+    elif type(post) == TextPost:
+        choices = ["Location", "Text"]
+    else:
+        raise TypeError("Unknown post type")
+
+    choices.append("Nothing")
+    choice = bullet.Bullet(prompt="What would you like to edit?", choices=choices, bullet=" ").launch()
+
+    if choice == "Caption":
+        caption = input("Caption: ")
+        post.caption = caption
+    elif choice == "Location":
+        location = input("Location: ")
+        post.location = location
+    elif choice == "Text":
+        text_file_path = join(content_manager.text_posts_dir, post.text_filename)
+        check_call(f"vim {text_file_path}", stderr = PIPE, shell = True)
+        content_manager.hydrate_templates()
+    elif choice == "Nothing":
+        pass
+    else:
+        raise ValueError("Unknown choice")
+
+    content_manager.update_post(post)
 
 def delete(content_manager, argv):
     if len(argv) < 1:
