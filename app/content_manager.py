@@ -23,6 +23,8 @@ import bullet
 image_file_extension = ".jpg"
 text_file_extension = ".md"
 
+stored_date_format = "%Y-%m-%d"
+
 #
 # ContentManager
 #
@@ -62,8 +64,7 @@ class ContentManager:
 
         # Create post
         properties = self.get_properties()
-        date_format = properties["date_format"]
-        date = datetime.now().strftime(date_format)
+        date = datetime.now().strftime(stored_date_format)
         post = ImagePost(post_id = str(uuid4()), image_filename = optimized_image_filename, caption = caption, date = date, location = location)
 
         # Add post
@@ -80,8 +81,7 @@ class ContentManager:
 
         # Create post
         properties = self.get_properties()
-        date_format = properties["date_format"]
-        date = datetime.now().strftime(date_format)
+        date = datetime.now().strftime(stored_date_format)
         post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_filename = copied_text_filename, date = date, location = location)
 
         # Add post
@@ -283,6 +283,9 @@ def delete(content_manager, argv):
 
 def generate(content_manager, argv):
     content_manager.hydrate_templates()
+
+def push(content_manager, argv):
+    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete -og --chown=webhost:www-data app/sites/{content_manager.sitename} webhost@{content_manager.sitename}:/home/webhost/sites/app/sites", stderr = PIPE, shell = True)
 
 def main(argv):
     if len(argv) < 2:
