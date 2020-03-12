@@ -3,6 +3,7 @@
 #
 
 import abc
+import datetime
 import json
 
 from os.path import join
@@ -33,8 +34,12 @@ class Post(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def to_html(self):
+    def to_html(self, date_format):
         pass
+
+    def format_date(self, date_format):
+        date = datetime.date.fromisoformat(self.date)
+        return date.strftime(date_format)
 
     def __str__(self):
         return json.dumps(self.to_json(), sort_keys = True, indent = 4)
@@ -71,7 +76,9 @@ class ImagePost(Post):
             "location": self.location,
         }
 
-    def to_html(self):
+    def to_html(self, date_format):
+        formatted_date = self.format_date(date_format)
+
         html = f"""
     <div class="image_post" id="{self.post_id}">
         <div class="image_link_div_fuck_css">
@@ -92,7 +99,7 @@ class ImagePost(Post):
     """
 
         return html + f"""
-        <p class="date">{self.date}</p>
+        <p class="date">{formatted_date}</p>
         <p class="permalink"><a href="../posts/{self.post_id}.html">&#x1F517;</a></p>
     </div>"""
 
@@ -128,10 +135,12 @@ class TextPost(Post):
             "location": self.location,
         }
 
-    def to_html(self):
+    def to_html(self, date_format):
         with open(join(self.text_posts_dir, self.text_filename), "r") as text_file:
             text = text_file.read()
             parsed_text = parse_markdown(text)
+
+        formatted_date = self.format_date(date_format)
 
         html = f"""
     <div class="text_post" id="{self.post_id}">
@@ -144,6 +153,6 @@ class TextPost(Post):
         """
 
         return html + f"""
-        <p class="date">{self.date}</p>
+        <p class="date">{formatted_date}</p>
         <p class="permalink"><a href="../posts/{self.post_id}.html">&#x1F517;</a></p>
     </div>"""

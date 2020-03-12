@@ -162,7 +162,7 @@ class ContentManager:
 
         # Generate the posts' HTML and fill in the index
         posts = self.get_posts()
-        post_htmls = [post.to_html() for post in posts]
+        post_htmls = [post.to_html(properties["date_format"]) for post in posts]
         post_html = "\n".join(post_htmls)
         index = index.replace("{posts}", post_html)
 
