@@ -93,7 +93,7 @@ class ImagePost(Post):
 
         return html + f"""
         <p class="date">{self.date}</p>
-        <p class="permalink"><a href="https://www.google.com">&#x1F517;</a></p>
+        <p class="permalink"><a href="../posts/{self.post_id}.html">&#x1F517;</a></p>
     </div>"""
 
 #
@@ -145,5 +145,5 @@ class TextPost(Post):
 
         return html + f"""
         <p class="date">{self.date}</p>
-        <p class="permalink"><a href="https://www.google.com">&#x1F517;</a></p>
+        <p class="permalink"><a href="../posts/{self.post_id}.html">&#x1F517;</a></p>
     </div>"""

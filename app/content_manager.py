@@ -33,9 +33,12 @@ class ContentManager:
         sites_dir = join(app_dir, "sites")
 
         self.sitename = sitename
-
         self.site_dir = join(sites_dir, sitename)
+
         self.templates_dir = join(self.site_dir, "templates")
+        self.index_template_path = join(self.templates_dir, "index.html")
+        self.error_template_path = join(self.templates_dir, "error.html")
+        self.post_template_path = join(self.templates_dir, "post.html")
 
         self.data_dir = join(self.site_dir, "data")
         self.properties_path = join(self.data_dir, "properties.json")
@@ -45,7 +48,9 @@ class ContentManager:
         self.content_dir = join(self.site_dir, "content")
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
+        self.posts_dir = join(self.content_dir, "posts")
         self.index_path = join(self.views_dir, "index.html")
+        self.error_path = join(self.views_dir, "error.html")
 
     def create_image_post(self, image_path, caption, location):
         # Optimize image
@@ -139,31 +144,39 @@ class ContentManager:
         self.hydrate_templates()
 
     def hydrate_templates(self):
+        # Copy the error file over from the templates directory
+        shutil.copy(self.error_template_path, self.error_path)
+
+        # Read the index and post templates and fill in the basics
         properties = self.get_properties()
 
-        template_names = [filename for filename in os.listdir(self.templates_dir)]
-
-        for template_name in template_names:
-            with open(join(self.templates_dir, template_name), "r") as template_file:
-                template = template_file.read()
-
-            view = template
-            for key, value in properties.items():
-                view = view.replace(f"{{{key}}}", value)
-
-            with open(join(self.views_dir, template_name), "w") as view_file:
-                view_file.write(view)
-
-        with open(join(self.views_dir, self.index_path), "r") as index_file:
+        with open(self.index_template_path, "r") as index_file:
             index = index_file.read()
+            for key, value in properties.items():
+                index = index.replace(f"{{{key}}}", value)
 
+        with open(self.post_template_path, "r") as post_template_file:
+            post_template = post_template_file.read()
+            for key, value in properties.items():
+                post_template = post_template.replace(f"{{{key}}}", value)
+
+        # Generate the posts' HTML and fill in the index
         posts = self.get_posts()
-        post_html = "\n".join([post.to_html() for post in posts])
+        post_htmls = [post.to_html() for post in posts]
+        post_html = "\n".join(post_htmls)
         index = index.replace("{posts}", post_html)
 
         with open(join(self.views_dir, self.index_path), "w") as index_file:
             index_file.write(index)
 
+        # Generate all of the individual post files
+        for (post, post_html) in zip(posts, post_htmls):
+            post_filename = post.post_id + ".html"
+            post_file_content = post_template.replace("{post}", post_html)
+
+            with open(join(self.posts_dir, post_filename), "w") as post_file:
+                post_file.write(post_file_content)
+        
     def get_properties(self):
         properties = {}
 
