@@ -74,9 +74,11 @@ class ImagePost(Post):
     def to_html(self):
         html = f"""
     <div class="image_post" id="{self.post_id}">
-        <a href="../images/{self.image_filename}">
-            <img src="../images/{self.image_filename}" alt="">
-        </a>
+        <div class="image_link_div_fuck_css">
+            <a href="../images/{self.image_filename}" class="image_link">
+                <img src="../images/{self.image_filename}" alt="">
+            </a>
+        </div>
         """
 
         if self.caption:
@@ -91,6 +93,7 @@ class ImagePost(Post):
 
         return html + f"""
         <p class="date">{self.date}</p>
+        <p class="permalink"><a href="https://www.google.com">&#x1F517;</a></p>
     </div>"""
 
 #
@@ -142,4 +145,5 @@ class TextPost(Post):
 
         return html + f"""
         <p class="date">{self.date}</p>
+        <p class="permalink"><a href="https://www.google.com">&#x1F517;</a></p>
     </div>"""

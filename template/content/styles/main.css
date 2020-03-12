@@ -137,24 +137,34 @@ body {
 }
 
 .text_post div {
-    margin-bottom: 5pt;
+  margin-bottom: 5pt;
 }
 
 p.md_header {
-    font-weight: bold;
+  font-weight: bold;
+}
+
+/*
+  Image Link Styling
+*/
+.image_post .image_link_div_fuck_css {
+  text-align: center;
+  margin-bottom: 15pt;
+}
+
+.image_post .image_link {
+  width: 100%;
+  margin-top: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /*
   Image Styling
 */
 .image_post img {
-  display: block;
   max-height: 380pt;
   max-width: 100%;
-  margin-top: 0;
-  margin-bottom: 15pt;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /*
@@ -193,6 +203,18 @@ p.md_header {
   color: #999999;
   text-align: center;
   margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
+  Permalink Styling
+*/
+.permalink {
+  font-size: small;
+  text-align: center;
+  margin-top: 5pt;
   margin-bottom: 0;
   margin-left: 0;
   margin-right: 0;
