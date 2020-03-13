@@ -144,11 +144,18 @@ class ContentManager:
         self.hydrate_templates()
 
     def hydrate_templates(self):
-        # Copy the error file over from the templates directory
-        shutil.copy(self.error_template_path, self.error_path)
-
-        # Read the index and post templates and fill in the basics
         properties = self.get_properties()
+
+        # Fill in and write out the error template
+        with open(self.error_template_path, "r") as error_template_file:
+            error = error_template_file.read()
+            for key, value in properties.items():
+                error = error.replace(f"{{{key}}}", value)
+
+        with open(self.error_path, "w") as error_file:
+            error_file.write(error)
+
+        # Read the index, error, and post templates and fill in the basics
 
         with open(self.index_template_path, "r") as index_file:
             index = index_file.read()
