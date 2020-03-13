@@ -136,8 +136,8 @@ body {
   margin-right: auto;
 }
 
-.text_post div {
-  margin-bottom: 5pt;
+.text_post .text {
+  margin-bottom: 15pt;
 }
 
 p.md_header {

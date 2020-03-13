@@ -102,9 +102,6 @@ def handle_post_text():
     if not text:
         abort(400)
 
-    if len(text) == 0:
-        abort(400)
-
     location = request.form.get("location")
     if not location:
         abort(400)
