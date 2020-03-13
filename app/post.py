@@ -10,6 +10,12 @@ from os.path import join
 from markdown_parser import parse_markdown
 
 #
+# Constants
+#
+
+stored_date_format = "%Y-%m-%d"
+
+#
 # Post Abstract Base Class
 #
 
@@ -38,7 +44,7 @@ class Post(abc.ABC):
         pass
 
     def format_date(self, date_format):
-        date = datetime.date.fromisoformat(self.date)
+        date = datetime.datetime.strptime(self.date, stored_date_format).date()
         return date.strftime(date_format)
 
     def __str__(self):
