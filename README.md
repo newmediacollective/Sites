@@ -3,7 +3,7 @@ A set of tools to manage photo stream sites.
 
 In a few minutes you can have your own HTTPS, responsive site that you can post photos to from anywhere.
 
-As an example, here's [my site](https://wheresben.today) managed with these tools.
+As an example, here's [my site](https://christianbator.com) managed with these tools.
 
 ## Getting Started
 Follow along with the instructions below to get started.
