@@ -181,6 +181,11 @@ class ContentManager:
             post_filename = post.post_id + ".html"
             post_file_content = post_template.replace("{post}", post_html)
 
+            if type(post) == ImagePost:
+                post_file_content = post_file_content.replace("{og_preview}", f"<meta property='og:image' content='../images/{post.image_filename}'>")
+            else:
+                post_file_content = post_file_content.replace("{og_preview}", "")
+
             with open(join(self.posts_dir, post_filename), "w") as post_file:
                 post_file.write(post_file_content)
 
