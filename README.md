@@ -1,7 +1,7 @@
 # sites ![Platform](https://img.shields.io/badge/Platform-macOS%20|%20ubuntu-blue.svg) ![Server](https://img.shields.io/badge/Server-nginx-brightgreen.svg) ![App](https://img.shields.io/badge/App-python%20|%20flask%20|%20gunicorn-red.svg)
-A set of tools to manage photo stream sites.
+A set of tools to manage simple websites.
 
-In a few minutes you can have your own HTTPS, responsive site that you can post photos to from anywhere.
+In a few minutes you can have your own HTTPS, responsive site for posting text and photos.
 
 As an example, here's [my site](https://christianbator.com) managed with these tools.
 
@@ -217,27 +217,6 @@ sudo certbot --nginx -d {new_host} -d www.{new_host}
 sudo python3 app/site_manager.py update_nginx
 sudo systemctl restart nginx
 ```
-
-## Mobile Uploads
-As mentioned above, posting a photo is just an HTTP POST request, so you can post from anywhere.
-
-### iOS
-I made an iOS shortcut that you can use to post from your iPhone:
-
-* Enable shortcut sharing: Settings > Shortcuts > Allow Untrusted Shortcuts
-* Download [the shortcut](https://www.icloud.com/shortcuts/bd5d5b9065684edcab4a2f2f7dbbb270)
-* Get your sites and tokens with:
-```
-python scripts/ios_shortcut_input.py
-```
-* Paste the result into the shortcut configuration when prompted
-
-You should be able to run the shortcut and select a photo to post, and it will also appear as a share sheet option.
-
-### Android
-Buy a [real phone](https://www.apple.com/iphone/) ;)
-
-Open to submissions!
 
 ## Caveats
 The site design is simple and inflexible, but there are already plenty of tools for managing complex sites. I wanted to post photos to an https site from my laptop and phone, and I wanted to serve them as static content.

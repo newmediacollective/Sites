@@ -108,7 +108,7 @@ class ContentManager:
                 return post
 
         return None
-        
+
     def delete_post(self, post):
         if type(post) == ImagePost:
             content_file_path = join(self.images_dir, post.image_filename)
@@ -183,7 +183,7 @@ class ContentManager:
 
             with open(join(self.posts_dir, post_filename), "w") as post_file:
                 post_file.write(post_file_content)
-        
+
     def get_properties(self):
         properties = {}
 
@@ -294,6 +294,9 @@ def generate(content_manager, argv):
 def push(content_manager, argv):
     check_call(f"rsync -vh -r --exclude '.DS_Store' --delete -og --chown=webhost:www-data app/sites/{content_manager.sitename} webhost@{content_manager.sitename}:/home/webhost/sites/app/sites", stderr = PIPE, shell = True)
 
+def pull(content_manager, argv):
+    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete webhost@{content_manager.sitename}:/home/webhost/sites/app/sites/{content_manager.sitename} app/sites", stderr = PIPE, shell = True)
+
 def main(argv):
     if len(argv) < 2:
         fuck_off()
@@ -314,6 +317,8 @@ def main(argv):
         generate(content_manager, argv[2:])
     elif action == "push":
         push(content_manager, argv[2:])
+    elif action == "pull":
+        pull(content_manager, argv[2:])
     else:
         fuck_off()
 
@@ -324,6 +329,7 @@ def fuck_off():
     usage += "    python3 content_manager.py <sitename> delete <post_id>\n"
     usage += "    python3 content_manager.py <sitename> generate\n"
     usage += "    python3 content_manager.py <sitename> push\n"
+    usage += "    python3 content_manager.py <sitename> pull\n"
 
     print(usage)
     sys.exit(2)

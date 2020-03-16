@@ -1,5 +1,5 @@
 #
-# site_manager.py
+# list_sites.py
 #
 
 import os
