@@ -22,6 +22,10 @@ body {
   margin-right: 0;
 }
 
+.title a, .title a:visited {
+  color: #595959;
+}
+
 /*
   Subtitle Styling
 */
@@ -212,9 +216,9 @@ p.md_header {
   Permalink Styling
 */
 .permalink {
-  font-size: small;
+  font-size: large;
   text-align: center;
-  margin-top: 5pt;
+  margin-top: 3pt;
   margin-bottom: 0;
   margin-left: 0;
   margin-right: 0;
@@ -235,6 +239,7 @@ p.md_header {
 /*
   Link Styling
 */
-a {
-  text-decoration: none;
+a, a:visited {
+    text-decoration: none;
+    color: #122868;
 }
