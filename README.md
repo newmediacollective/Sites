@@ -259,7 +259,7 @@ The site design is simple and inflexible, but there are already plenty of tools
 for managing complex sites. I wanted to post photos to an https site from my
 laptop and phone, and I wanted to serve them as static content.
 
-That said, *feel free to fork* the project and mess around with the `template`
+That said, feel free to fork the project and mess around with the `template`
 directory - there are CSS files in `template/content/styles`. Restructuring the
 HTML requires code changes in `app/post.py`.
 
