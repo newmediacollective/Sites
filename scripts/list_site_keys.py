@@ -1,5 +1,5 @@
 #
-# list_sites.py
+# list_site_keys.py
 #
 
 import os
