@@ -301,10 +301,10 @@ def generate(content_manager, argv):
     content_manager.hydrate_templates()
 
 def push(content_manager, argv):
-    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete -og --chown=webhost:www-data app/sites/{content_manager.sitename} webhost@{content_manager.sitename}:/home/webhost/sites/app/sites", stderr = PIPE, shell = True)
+    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete -og --chown=webhost:www-data app/sites/{content_manager.sitename} webhost@{content_manager.sitename}:/home/webhost/Sites/app/sites", stderr = PIPE, shell = True)
 
 def pull(content_manager, argv):
-    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete webhost@{content_manager.sitename}:/home/webhost/sites/app/sites/{content_manager.sitename} app/sites", stderr = PIPE, shell = True)
+    check_call(f"rsync -vh -r --exclude '.DS_Store' --delete webhost@{content_manager.sitename}:/home/webhost/Sites/app/sites/{content_manager.sitename} app/sites", stderr = PIPE, shell = True)
 
 def main(argv):
     if len(argv) < 2:
