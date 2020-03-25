@@ -1,144 +1,194 @@
-# sites ![Platform](https://img.shields.io/badge/Platform-macOS%20|%20ubuntu-blue.svg) ![Server](https://img.shields.io/badge/Server-nginx-brightgreen.svg) ![App](https://img.shields.io/badge/App-python%20|%20flask%20|%20gunicorn-red.svg)
+sites
+=====
+
 A set of tools to manage simple websites.
 
-In a few minutes you can have your own HTTPS, responsive site for posting text and photos.
+In a few minutes you can have your own HTTPS, responsive site for posting text
+and photos.
 
-## Getting Started
+Getting Started
+---------------
+
 Follow along with the instructions below to get started.
 
 ### Prerequisites
-* Python3 and ImageMagick installed locally
-```
-brew install python
-brew install imagemagick
-```
-* A domain name (e.g. google.com), which we'll call `{host}`
-  * I like [namecheap](https://www.namecheap.com)
-* An Ubuntu 18.04 server with ssh access to `root`
-  * You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
-* DNS configured to point the domain to the server
-  * You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
 
-Verify your domain points to your ip with:
+Install Python3 and ImageMagick locally:
 ```
-nslookup {host}
+[local]$ brew install python
+[local]$ brew install imagemagick
+```
+
+- Get a domain name (e.g. google.com), which we'll call `{host}`
+  - I like [namecheap](https://www.namecheap.com)
+  - Note that `{host}` is assumed to not be prefixed with `www.`
+- Get an Ubuntu 18.04 server with ssh access to `root`
+  - You can set one up through [DigitalOcean](https://www.digitalocean.com/docs/droplets/how-to/create/)
+- Configure DNS to point the domain to the server
+  - You can follow [these instructions](https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars)
+
+You can verify that your domain points to your server's IP with:
+```
+[local]$ nslookup {host}
 ```
 
 ### Setup
-Setup your server with the following commands, substituting your domain for `{host}`:
+
+Set up your server with the following commands, substituting your domain for
+`{host}`.
 
 **1. Clone the repo**
+
 ```
-git clone git@github.com:christianbator/sites.git
-cd sites
+[local]$ git clone git@github.com:boztalay/sites.git
+[local]$ cd sites
 ```
 
-**2. Configure your local environment**<br>
-If you already manage python virtual environments, feel free to set up a virtual environment how you normally do.
+**2. Configure your local environment**
 
-Then run:
+If you already manage Python virtual environments, feel free to set up a virtual
+environment how you normally do, then run:
 ```
-pip install -r requirements.txt
+[local]$ pip install -r requirements.txt
 ```
 
 Otherwise, you can set up a virtual environment with:
 ```
-source scripts/setup_local.sh
+[local]$ source scripts/setup_local.sh
 ```
 
-* This will create a virtual environment in `app/.env`
-  * All `python` commands should be run with your virtual environment activated
-  * Activate with `source app/.env/bin/activate`
-  * Deactivate with `deactivate`
+- This will create a virtual environment in `app/.env`
+  - All `python` commands should be run with your virtual environment activated
+  - Activate with `source app/.env/bin/activate`
+  - Deactivate with `deactivate`
 
-**3. Configure your remote environment**<br>
+**3. Configure your remote environment**
+
 Create a user named `webhost` with `sudo` privileges:
 ```
-ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
+[local]$ ssh root@{host} "bash -s" -- < scripts/setup_webhost.sh
 ```
 
 Configure the server:
 ```
-ssh webhost@{host}
+[local]$ ssh webhost@{host}
 
 # You'll be prompted to update your password - do so, then log in again
 
-git clone git@github.com:christianbator/sites.git
-cd sites
-source scripts/setup_server.sh
+[server]$ git clone git@github.com:boztalay/sites.git
+[server]$ cd sites
+[server]$ source scripts/setup_server.sh
 ```
 
-* This will create a virtual environment in `app/.env`
-  * All `python` commands should be run with your virtual environment activated
-  * Activate with `source app/.env/bin/activate`
-  * Deactivate with `deactivate`
-* This will also setup [nginx](https://www.nginx.com/resources/wiki/) and [Let's Encrypt](https://letsencrypt.org)
-* Everything will be run from the `webhost` user as part of the nginx group, `www-data`
+- This will create a virtual environment in `app/.env`
+  - All `python` commands should be run with your virtual environment activated
+  - Activate with `source app/.env/bin/activate`
+  - Deactivate with `deactivate`
+- This will also setup [nginx](https://www.nginx.com/resources/wiki/) and
+  [Let's Encrypt](https://letsencrypt.org)
+- Everything will be run from the `webhost` user as part of the nginx group,
+  `www-data`
 
 **4. Create your site**
+
 ```
-python app/site_manager.py create -s "{host}" -t "site title" -d "site description"
+[server]$ python app/site_manager.py create -s "{host}" -t "site title" -d "site description" -f "date format"
 ```
 
-* This will create the directory `app/sites/{host}` that contains all your site's data
-* It will also generate a secret key in `app/sites/secret.txt` that we'll use to sign tokens
-  * To post to your site, you'll need to provide a valid token (more on that later)
-* You can update your site's title and description in the `app/sites/{host}/data/properties.json` file
+- This will create the directory `app/sites/{host}` that contains all your
+  site's data
+- It will also generate a secret key in `app/sites/secret.txt` that we'll use to
+  sign tokens
+  - To post to your site, you'll need to provide a valid token (more on that
+    later)
+- You can update your site's title and description in the
+  `app/sites/{host}/data/properties.json` file
 
 **5. Encrypt the traffic**
+
 ```
-sudo certbot --nginx -d {host} -d www.{host}
+[server]$ sudo certbot --nginx -d {host} -d www.{host}
 ```
 
-We'll update the nginx config, so you can ignore the error that cerbot failed to install the certificate.
+We'll update the nginx config, so you can ignore the error that cerbot failed to
+install the certificate.
 
 **6. Start it up**
-Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in `app/sites`:
+
+Update the nginx config in `/etc/nginx/nginx.conf` for every site defined in
+`app/sites`:
 ```
-sudo python3 app/site_manager.py update_nginx
+[server]$ sudo python3 app/site_manager.py update_nginx
 ```
 
-Start nginx (to serve the static site) and a gunicorn daemon (to serve the flask app for image uploads):
+Start nginx (to serve the static site) and a gunicorn daemon (to serve the flask
+app for image uploads):
 ```
-./scripts/start_services.sh
+[server]$ ./scripts/start_services.sh
 ```
 
 Generate your site:
 ```
-python app/content_manager.py regenerate -s {host}
+[server]$ python app/content_manager.py {host} generate
 ```
 
 You should see an empty site with your title and description at https://{host}
 
 ### Setup Notes
-* Site
-  * The site is served as static content from nginx out of the `/home/webhost/sites/app/sites/{host}/content` directory
-  * Site data is stored in `app/sites/{host}/data`
-  * HTML pages are generated by the `app/content_manager.py` script
-* Posting
-  * Image uploads are handled by a Flask app served by a Gunicorn daemon
-  * Images should be uploaded as a common type (png, jpg, etc.)
-  * Images are then converted to progressive jpgs using ImageMagick
-* Routing
-  * All HTTP traffic is redirected to HTTPS
-  * All www urls are redirected to non www
-  * All trailing slash urls are rewritten to non trailing slash urls
 
-## Usage
-There are a few tools to help manage your site(s).
+- Site
+  - The site is served as static content from nginx out of the
+    `/home/webhost/sites/app/sites/{host}/content` directory
+  - Site data is stored in `app/sites/{host}/data`
+  - HTML pages are generated by the `app/content_manager.py` script
+- Posting
+  - Image uploads are handled by a Flask app served by a Gunicorn daemon
+  - Images should be uploaded as a common type (png, jpg, etc.)
+  - Images are then converted to progressive jpgs using ImageMagick
+- Routing
+  - All HTTP traffic is redirected to HTTPS
+  - All www urls are redirected to non www
+  - All trailing slash urls are rewritten to non trailing slash urls
+
+Usage
+-----
+
+There are a couple tools to help manage your site(s).
 
 ### Syncing
+
 You can sync your site content to and from your remote server with:
 ```
-./scripts/pull.sh {host}
-./scripts/push.sh {host}
+[local]$ python app/content_manager.py {host} pull
+[local]$ python app/content_manager.py {host} push
 ```
 
-These scripts just `rsync` the `app/sites/{host}` directory to and from the remote server. Pulling is useful when you've posted an image directly to your remote server, and you want to pull the latest version of your site to your local machine. Pushing is useful when you've posted an image on your local machine and want to update your public site.
+After you create a new site on the server, you'll want to pull it down locally
+before making posts.
 
-**Note:** this will overwrite the destination site!
+Pulling is useful when you've posted directly to your remote server, and you
+want to pull the latest version of your site to your local machine. Pushing is
+useful when you've created a post on your local machine and want to update your
+public site.
 
-### Running Locally
+**Note:** Pushing and pulling will overwrite the destination!
+
+### Posting
+
+To create a post locally, use:
+```
+[local]$ python app/content_manager.py {host} create image /path/to/image.jpg
+[local]$ python app/content_manager.py {host} create text /path/to/text.md
+```
+
+To post directly to your server, use:
+```
+[local]$ ./scripts/post_image.sh {host} /path/to/image.jpg "caption" "location"
+[local]$ ./scripts/post_text.sh {host} /path/to/text.md "location"
+```
+
+### Developing Locally
+
 To run the app locally in debug mode, use:
 ```
 python app/app.py
@@ -148,77 +198,69 @@ This will run the app at `http://localhost:5000`, so you can post images locally
 
 You can open your site locally with:
 ```
-open app/sites/{host}/content/views/index.html
+[local]$ open app/sites/{host}/content/views/index.html
 ```
 
-### Posting
-To post locally in debug mode, use:
+You can test posting directly to the server locally with:
 ```
-./scripts/post_image_local.sh {host} /path/to/image.jpg "caption" "location"
-./scripts/post_text_local.sh {host} /path/to/text.txt  "location"
-```
-
-To post to your server, first sync the site down (if it's not already):
-```
-./scripts/pull.sh {host}
+[local]$ ./scripts/post_image_local.sh {host} /path/to/image.jpg "caption" "location"
+[local]$ ./scripts/post_text_local.sh {host} /path/to/text.md "location"
 ```
 
-Then verify we can create a token from the secret for the site:
-```
-pyjwt --key=$(cat app/sites/{host}/secret.txt) encode sitename={host}
-```
-
-Then you can use the helper script to post images and text:
-```
-./scripts/post_image.sh {host} /path/to/image.jpg "caption" "location"
-./scripts/post_text.sh {host} /path/to/text.txt  "location"
-```
-
-Under the hood, it's just an HTTP POST request to `https://{host}/posts`, meaning you can use that token to post images from anywhere:
-```
-curl -i -H "Authorization: Bearer token" -F "image=@/path/to/image" -F "caption=caption" -F "location=location" https://{host}/posts
-```
+**Note:** Individual post pages don't work locally because they rely on nginx to
+reroute their paths to the `.html` files.
 
 ### Icons
-Fill in the `app/sites/{host}/content/icons` directory with the following files so your site will automatically serve a favicon and apple touch icon:
+
+Fill in the `app/sites/{host}/content/icons` directory with the following files
+so your site will automatically serve a favicon and Apple touch icon:
+
 ```
 favicon.png (64x64)
 apple-touch-icon.png (180x180)
 ```
 
-Then push your site to your remote server:
-```
-./scripts/push.sh {host}
-```
-
 ### Regenerating
-If you ever edit anything in `app/sites/{host}/data`, you can regenerate your site with:
+
+If you ever edit anything in `app/sites/{host}/data`, you can regenerate your
+site with:
 ```
-python app/content_manager.py regenerate -s {host}
+[local]$ python app/content_manager.py {host} generate
 ```
 
 ### Multiple Sites
-Managing multiple sites on the same machine is pretty simple (you can host them on different servers if you prefer).
+
+Managing multiple sites on the same machine is pretty simple (you can host them
+on different servers if you prefer).
 
 **1. Create a new site on your server**
+
 ```
-python app/site_manager.py create -s "{new_host}" -t "new site title" -d "new site description"
+[server]$ python app/site_manager.py create -s "{new_host}" -t "new site title" -d "new site description" -f "date format"
 ```
 
 **2. Encrypt the traffic**
+
 ```
-sudo certbot --nginx -d {new_host} -d www.{new_host}
+[server]$ sudo certbot --nginx -d {new_host} -d www.{new_host}
 ```
 
 **3. Update and restart nginx**
+
 ```
-sudo python3 app/site_manager.py update_nginx
-sudo systemctl restart nginx
+[server]$ sudo python3 app/site_manager.py update_nginx
+[server]$ sudo systemctl restart nginx
 ```
 
-## Caveats
-The site design is simple and inflexible, but there are already plenty of tools for managing complex sites. I wanted to post photos to an https site from my laptop and phone, and I wanted to serve them as static content.
+Caveats
+-------
 
-That said, feel free to fork the project and mess around with the `template` directory - there are css files in `template/content/styles`. Restructuring the HTML requires code changes in `app/post.py`.
+The site design is simple and inflexible, but there are already plenty of tools
+for managing complex sites. I wanted to post photos to an https site from my
+laptop and phone, and I wanted to serve them as static content.
+
+That said, *feel free to fork* the project and mess around with the `template`
+directory - there are CSS files in `template/content/styles`. Restructuring the
+HTML requires code changes in `app/post.py`.
 
 Happy site building!

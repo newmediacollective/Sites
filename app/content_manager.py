@@ -60,7 +60,7 @@ class ContentManager:
         optimized_image_filename = image_id + image_file_extension
         optimized_image_path = join(self.images_dir, optimized_image_filename)
 
-        check_call(f"convert {image_path} -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
+        check_call(f"convert '{image_path}' -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
         properties = self.get_properties()
@@ -117,7 +117,11 @@ class ContentManager:
         else:
             raise TypeError("Unknown post type")
 
+        post_file_name = post.post_id + ".html"
+        post_file_path = join(self.posts_dir, post_file_name)
+
         os.remove(content_file_path)
+        os.remove(post_file_path)
 
         posts = self.get_posts()
         posts = filter(lambda x: (x.post_id != post.post_id), posts)
