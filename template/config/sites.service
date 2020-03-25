@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User=webhost
 Group=www-data
-WorkingDirectory=/home/webhost/sites/app
-Environment="PATH=/home/webhost/sites/app/.env/bin:/usr/bin"
-ExecStart=/home/webhost/sites/app/.env/bin/gunicorn --worker-class=gevent --workers 4 --bind unix:sites.sock -m 007 wsgi:app
+WorkingDirectory=/home/webhost/Sites/app
+Environment="PATH=/home/webhost/Sites/app/.env/bin:/usr/bin"
+ExecStart=/home/webhost/Sites/app/.env/bin/gunicorn --worker-class=gevent --workers 4 --bind unix:sites.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target
