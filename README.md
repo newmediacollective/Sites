@@ -3,8 +3,6 @@ A set of tools to manage simple websites.
 
 In a few minutes you can have your own HTTPS, responsive site for posting text and photos.
 
-As an example, here's [my site](https://christianbator.com) managed with these tools.
-
 ## Getting Started
 Follow along with the instructions below to get started.
 
