@@ -30,6 +30,8 @@ class Post(abc.ABC):
 
         if post_type == "image":
             return ImagePost.from_json(post_json)
+        elif post_type == "video":
+            return VideoPost.from_json(post_json)
         elif post_type == "text":
             return TextPost.from_json(text_posts_dir, post_json)
         else:
@@ -92,6 +94,64 @@ class ImagePost(Post):
                 <img src="../images/{self.image_filename}" alt="">
             </a>
         </div>
+        """
+
+        if self.caption:
+            html += f"""
+        <p class="caption">{self.caption}</p>
+    """
+
+        if self.location:
+            html += f"""
+        <p class="location">{self.location}</p>
+    """
+
+        return html + f"""
+        <p class="date">{formatted_date}</p>
+        <p class="permalink"><a href="../posts/{self.post_id}">∞</a></p>
+    </div>"""
+
+#
+# VideoPost
+#
+
+class VideoPost(Post):
+    def __init__(self, post_id, video_filename, caption, date, location):
+        super().__init__(post_id)
+        self.video_filename = video_filename
+        self.caption = caption
+        self.date = date
+        self.location = location
+
+    @staticmethod
+    def from_json(post_json):
+        return VideoPost(
+            post_id = post_json["id"],
+            video_filename = post_json["video_filename"],
+            caption = post_json.get("caption"),
+            date = post_json["date"],
+            location = post_json.get("location")
+        )
+
+    def to_json(self):
+        return {
+            "id": self.post_id,
+            "type": "video",
+            "video_filename": self.video_filename,
+            "caption": self.caption,
+            "date": self.date,
+            "location": self.location,
+        }
+
+    def to_html(self, date_format):
+        formatted_date = self.format_date(date_format)
+
+        html = f"""
+    <div class="video_post" id="{self.post_id}">
+        <video controls>
+            <source src="../videos/{self.video_filename}" type="video/mp4">
+            Your browser doesn't support this video :(
+        </video>
         """
 
         if self.caption:

@@ -12,7 +12,7 @@ from subprocess import check_call, PIPE
 from os.path import splitext, join, exists, dirname
 from uuid import uuid4
 from datetime import datetime
-from post import Post, ImagePost, TextPost
+from post import Post, ImagePost, TextPost, VideoPost
 
 import bullet
 
@@ -21,6 +21,7 @@ import bullet
 #
 
 image_file_extension = ".jpg"
+video_file_extension = ".mp4"
 text_file_extension = ".md"
 
 stored_date_format = "%Y-%m-%d"
@@ -50,6 +51,7 @@ class ContentManager:
         self.content_dir = join(self.site_dir, "content")
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
+        self.videos_dir = join(self.content_dir, "videos")
         self.posts_dir = join(self.content_dir, "posts")
         self.index_path = join(self.views_dir, "index.html")
         self.error_path = join(self.views_dir, "error.html")
@@ -66,6 +68,24 @@ class ContentManager:
         properties = self.get_properties()
         date = datetime.now().strftime(stored_date_format)
         post = ImagePost(post_id = str(uuid4()), image_filename = optimized_image_filename, caption = caption, date = date, location = location)
+
+        # Add post
+        self.add_post_and_update(post)
+        return post
+
+    def create_video_post(self, video_path, caption, location):
+        # Optimize image
+        video_id = str(uuid4())
+        optimized_video_filename = video_id + video_file_extension
+        optimized_video_path = join(self.videos_dir, optimized_video_filename)
+
+        print("Optimizing video...")
+        check_call(f"ffmpeg -i '{video_path}' {optimized_video_path}", stderr = PIPE, shell = True)
+
+        # Create post
+        properties = self.get_properties()
+        date = datetime.now().strftime(stored_date_format)
+        post = VideoPost(post_id = str(uuid4()), video_filename = optimized_video_filename, caption = caption, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -112,6 +132,8 @@ class ContentManager:
     def delete_post(self, post):
         if type(post) == ImagePost:
             content_file_path = join(self.images_dir, post.image_filename)
+        elif type(post) == VideoPost:
+            content_file_path = join(self.videos_dir, post.video_filename)
         elif type(post) == TextPost:
             content_file_path = join(self.text_posts_dir, post.text_filename)
         else:
@@ -187,6 +209,8 @@ class ContentManager:
 
             if type(post) == ImagePost:
                 post_file_content = post_file_content.replace("{og_preview}", f"<meta property='og:image' content='../images/{post.image_filename}'>")
+            elif type(post) == VideoPost:
+                post_file_content = post_file_content.replace("{og_preview}", f"<meta property='og:video' content='../videos/{post.video_filename}'>")
             else:
                 post_file_content = post_file_content.replace("{og_preview}", "")
 
@@ -237,6 +261,16 @@ def create(content_manager, argv):
             location = None
 
         content_manager.create_text_post(content_file_path, location)
+    elif post_type == "video":
+        caption = input("Caption: ")
+        if len(caption) == 0:
+            caption = None
+
+        location = input("Location: ")
+        if len(location) == 0:
+            location = None
+
+        content_manager.create_video_post(content_file_path, caption, location)
     else:
         fuck_off()
 
@@ -252,6 +286,8 @@ def update(content_manager, argv):
         return
 
     if type(post) == ImagePost:
+        choices = ["Caption", "Location"]
+    elif type(post) == VideoPost:
         choices = ["Caption", "Location"]
     elif type(post) == TextPost:
         choices = ["Location", "Text"]
@@ -333,7 +369,7 @@ def main(argv):
 
 def fuck_off():
     usage  = "Usage:\n"
-    usage += "    python3 content_manager.py <sitename> create <text | image> <content_file_path>\n"
+    usage += "    python3 content_manager.py <sitename> create <text | image | video> <content_file_path>\n"
     usage += "    python3 content_manager.py <sitename> update <post_id>\n"
     usage += "    python3 content_manager.py <sitename> delete <post_id>\n"
     usage += "    python3 content_manager.py <sitename> generate\n"

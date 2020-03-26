@@ -40,93 +40,15 @@ body {
 }
 
 /*
-  Post Styling
+  Link Styling
 */
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-  .image_post {
-    width: 80%;
-  }
-
-  .text_post {
-    max-width: 80%;
-  }
-
-  .image_post .caption {
-    max-width: 100%;
-  }
-}
-
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-  .image_post {
-    width: 80%;
-  }
-
-  .text_post {
-    max-width: 80%;
-  }
-
-  .image_post .caption {
-    max-width: 100%;
-  }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-  .image_post {
-    width: 80%;
-  }
-
-  .text_post {
-    max-width: 60%;
-  }
-
-  .image_post .caption {
-    max-width: 60%;
-  }
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-  .image_post {
-    width: 60%;
-  }
-
-  .text_post {
-    max-width: 40%;
-  }
-
-  .image_post .caption {
-    max-width: 60%;
-  }
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-  .image_post {
-    width: 60%;
-  }
-
-  .text_post {
-    max-width: 30%;
-  }
-
-  .image_post .caption {
-    max-width: 60%;
-  }
-}
-
-.image_post {
-  margin-top: 0;
-  margin-bottom: 45pt;
-  margin-left: auto;
-  margin-right: auto;
+a, a:visited {
+    text-decoration: none;
+    color: #5A73BF;
 }
 
 /*
-  Text Styling
+  Text Post Styling
 */
 .text_post {
   display: block;
@@ -149,8 +71,15 @@ p.md_header {
 }
 
 /*
-  Image Link Styling
+  Image Post Styling
 */
+.image_post {
+  margin-top: 0;
+  margin-bottom: 45pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .image_post .image_link_div_fuck_css {
   text-align: center;
   margin-bottom: 15pt;
@@ -163,18 +92,33 @@ p.md_header {
   margin-right: auto;
 }
 
-/*
-  Image Styling
-*/
 .image_post img {
   max-height: 380pt;
   max-width: 100%;
 }
 
 /*
+  Video Post Styling
+*/
+.video_post {
+  text-align: center;
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 45pt;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.video_post video {
+  max-height: 380pt;
+  max-width: 100%;
+  margin-bottom: 15pt;
+}
+
+/*
   Caption Styling
 */
-.image_post .caption {
+.caption {
   display: block;
   font-size: small;
   color: #595959;
@@ -237,9 +181,120 @@ p.md_header {
 }
 
 /*
-  Link Styling
+  Responsive Sizing
 */
-a, a:visited {
-    text-decoration: none;
-    color: #5A73BF;
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .text_post {
+    max-width: 80%;
+  }
+
+  .image_post {
+    width: 80%;
+  }
+
+  .image_post .caption {
+    max-width: 100%;
+  }
+
+  .video_post {
+    width: 80%;
+  }
+
+  .video_post .caption {
+    max-width: 100%;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .text_post {
+    max-width: 80%;
+  }
+
+  .image_post {
+    width: 80%;
+  }
+
+  .image_post .caption {
+    max-width: 100%;
+  }
+
+  .video_post {
+    width: 80%;
+  }
+
+  .video_post .caption {
+    max-width: 100%;
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .text_post {
+    max-width: 60%;
+  }
+
+  .image_post {
+    width: 80%;
+  }
+
+  .image_post .caption {
+    max-width: 60%;
+  }
+
+  .video_post {
+    width: 80%;
+  }
+
+  .video_post .caption {
+    max-width: 60%;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .text_post {
+    max-width: 40%;
+  }
+
+  .image_post {
+    width: 60%;
+  }
+
+  .image_post .caption {
+    max-width: 60%;
+  }
+
+  .video_post {
+    width: 60%;
+  }
+
+  .video_post .caption {
+    max-width: 60%;
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .text_post {
+    max-width: 30%;
+  }
+
+  .image_post {
+    width: 60%;
+  }
+
+  .image_post .caption {
+    max-width: 60%;
+  }
+
+  .video_post {
+    width: 60%;
+  }
+
+  .video_post .caption {
+    max-width: 60%;
+  }
 }
