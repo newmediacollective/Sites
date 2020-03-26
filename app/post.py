@@ -116,9 +116,10 @@ class ImagePost(Post):
 #
 
 class VideoPost(Post):
-    def __init__(self, post_id, video_filename, caption, date, location):
+    def __init__(self, post_id, video_filename, thumbnail_filename, caption, date, location):
         super().__init__(post_id)
         self.video_filename = video_filename
+        self.thumbnail_filename = thumbnail_filename
         self.caption = caption
         self.date = date
         self.location = location
@@ -128,6 +129,7 @@ class VideoPost(Post):
         return VideoPost(
             post_id = post_json["id"],
             video_filename = post_json["video_filename"],
+            thumbnail_filename = post_json["thumbnail_filename"],
             caption = post_json.get("caption"),
             date = post_json["date"],
             location = post_json.get("location")
@@ -138,6 +140,7 @@ class VideoPost(Post):
             "id": self.post_id,
             "type": "video",
             "video_filename": self.video_filename,
+            "thumbnail_filename": self.thumbnail_filename,
             "caption": self.caption,
             "date": self.date,
             "location": self.location,
@@ -148,11 +151,10 @@ class VideoPost(Post):
 
         html = f"""
     <div class="video_post" id="{self.post_id}">
-        <video controls>
-            <source src="../videos/{self.video_filename}" type="video/mp4">
+        <video id="video_{self.post_id}" poster="../thumbnails/{self.thumbnail_filename}" oncanplay="showVideoControls(this);">
+            <source type="video/mp4" src="../videos/{self.video_filename}">
             Your browser doesn't support this video :(
-        </video>
-        """
+        </video>"""
 
         if self.caption:
             html += f"""

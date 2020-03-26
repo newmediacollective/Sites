@@ -55,6 +55,7 @@ def create(sitename, title, description, date_format):
     os.makedirs(join(content_dir, "icons"))
     os.makedirs(join(content_dir, "images"))
     os.makedirs(join(content_dir, "videos"))
+    os.makedirs(join(content_dir, "thumbnails"))
     os.makedirs(join(content_dir, "posts"))
     os.makedirs(join(content_dir, "views"))
 

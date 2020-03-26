@@ -52,6 +52,7 @@ class ContentManager:
         self.views_dir = join(self.content_dir, "views")
         self.images_dir = join(self.content_dir, "images")
         self.videos_dir = join(self.content_dir, "videos")
+        self.thumbnails_dir = join(self.content_dir, "thumbnails")
         self.posts_dir = join(self.content_dir, "posts")
         self.index_path = join(self.views_dir, "index.html")
         self.error_path = join(self.views_dir, "error.html")
@@ -78,14 +79,19 @@ class ContentManager:
         video_id = str(uuid4())
         optimized_video_filename = video_id + video_file_extension
         optimized_video_path = join(self.videos_dir, optimized_video_filename)
+        thumbnail_filename = video_id + image_file_extension
+        thumbnail_path = join(self.thumbnails_dir, thumbnail_filename)
 
         print("Optimizing video...")
         check_call(f"ffmpeg -i '{video_path}' {optimized_video_path}", stderr = PIPE, shell = True)
 
+        print("Capturing thumbnail...")
+        check_call(f"ffmpeg -ss 0 -i {optimized_video_path} -frames:v 1 -qscale:v 2 {thumbnail_path}", stderr = PIPE, shell = True)
+
         # Create post
         properties = self.get_properties()
         date = datetime.now().strftime(stored_date_format)
-        post = VideoPost(post_id = str(uuid4()), video_filename = optimized_video_filename, caption = caption, date = date, location = location)
+        post = VideoPost(post_id = str(uuid4()), video_filename = optimized_video_filename, thumbnail_filename = thumbnail_filename, caption = caption, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)
@@ -134,6 +140,9 @@ class ContentManager:
             content_file_path = join(self.images_dir, post.image_filename)
         elif type(post) == VideoPost:
             content_file_path = join(self.videos_dir, post.video_filename)
+
+            thumbnail_path = join(self.thumbnails_dir, post.thumbnail_filename)
+            os.remove(thumbnail_path)
         elif type(post) == TextPost:
             content_file_path = join(self.text_posts_dir, post.text_filename)
         else:
@@ -210,7 +219,12 @@ class ContentManager:
             if type(post) == ImagePost:
                 post_file_content = post_file_content.replace("{og_preview}", f"<meta property='og:image' content='../images/{post.image_filename}'>")
             elif type(post) == VideoPost:
-                post_file_content = post_file_content.replace("{og_preview}", f"<meta property='og:video' content='../videos/{post.video_filename}'>")
+                post_file_content = post_file_content.replace("{og_preview}", f"""
+                    <meta property="og:type" content="video">
+                    <meta property="og:video" content="../videos/{post.video_filename}">
+                    <meta property="og:image" content="../thumbnails/{post.thumbnail_filename}">
+                """
+                )
             else:
                 post_file_content = post_file_content.replace("{og_preview}", "")
 
