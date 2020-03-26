@@ -151,7 +151,7 @@ class VideoPost(Post):
 
         html = f"""
     <div class="video_post" id="{self.post_id}">
-        <video id="video_{self.post_id}" poster="../thumbnails/{self.thumbnail_filename}" oncanplay="showVideoControls(this);">
+        <video id="video_{self.post_id}" poster="../thumbnails/{self.thumbnail_filename}" onloadedmetadata="showVideoControls(this);">
             <source type="video/mp4" src="../videos/{self.video_filename}">
             Your browser doesn't support this video :(
         </video>"""
