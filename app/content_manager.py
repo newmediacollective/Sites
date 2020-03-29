@@ -82,8 +82,11 @@ class ContentManager:
         thumbnail_filename = video_id + image_file_extension
         thumbnail_path = join(self.thumbnails_dir, thumbnail_filename)
 
-        print("Optimizing video...")
-        check_call(f"ffmpeg -i '{video_path}' {optimized_video_path}", stderr = PIPE, shell = True)
+        if video_path.endswith(video_file_extension):
+            shutil.copy(video_path, optimized_video_path)
+        else:
+            print("Optimizing video...")
+            check_call(f"ffmpeg -i '{video_path}' {optimized_video_path}", stderr = PIPE, shell = True)
 
         print("Capturing thumbnail...")
         check_call(f"ffmpeg -ss 0 -i {optimized_video_path} -frames:v 1 -qscale:v 2 {thumbnail_path}", stderr = PIPE, shell = True)
