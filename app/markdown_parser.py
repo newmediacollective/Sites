@@ -7,11 +7,12 @@ import re
 from flask import escape
 
 def parse_markdown(markdown):
-    # Escape HTML-unsafe text
-    markdown = str(escape(markdown))
-
     # Replace newlines
-    parsed_text = markdown.replace("\n\n", "\n<br><br>\n")
+    parsed_text = markdown.replace("\n\n", "<br><br>")
+    parsed_text = parsed_text.replace("\n", "<br>")
+
+    # Embolden
+    parsed_text = re.sub(r"\*\*(.+)\*\*", lambda x: "<b>" + x.group(1) + "</b>", parsed_text)
 
     # Replace headers
     parsed_text = re.sub(r"# (.+)", lambda x: "<p class='md_header'>" + x.group(1) + "</p>", parsed_text)

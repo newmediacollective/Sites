@@ -157,8 +157,9 @@ class VideoPost(Post):
         </video>"""
 
         if self.caption:
+            parsed_caption = parse_markdown(self.caption)
             html += f"""
-        <p class="caption">{self.caption}</p>
+        <p class="caption">{parsed_caption}</p>
     """
 
         if self.location:
