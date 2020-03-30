@@ -7,7 +7,7 @@ import datetime
 import json
 
 from os.path import join
-from markdown_parser import parse_markdown
+from markdown_parser import *
 
 #
 # Constants
@@ -157,7 +157,7 @@ class VideoPost(Post):
         </video>"""
 
         if self.caption:
-            parsed_caption = parse_markdown(self.caption)
+            parsed_caption = parse_caption_markdown(self.caption)
             html += f"""
         <p class="caption">{parsed_caption}</p>
     """
@@ -207,7 +207,7 @@ class TextPost(Post):
     def to_html(self, date_format):
         with open(join(self.text_posts_dir, self.text_filename), "r") as text_file:
             text = text_file.read()
-            parsed_text = parse_markdown(text)
+            parsed_text = parse_full_markdown(text)
 
         formatted_date = self.format_date(date_format)
 

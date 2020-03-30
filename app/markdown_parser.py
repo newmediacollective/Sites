@@ -4,17 +4,24 @@
 
 import re
 
-from flask import escape
-
-def parse_markdown(markdown):
+def parse_full_markdown(markdown):
     # Replace headers
     parsed_text = re.sub(r"^# (.+)\n", lambda x: "<p class='md_header'>" + x.group(1) + "</p>", markdown)
 
+    return parse_caption_markdown(parsed_text)
+
+
+def parse_caption_markdown(markdown):
     # Replace newlines
-    parsed_text = parsed_text.replace("\n", "<br>")
+    parsed_text = markdown.replace("\n", "<br>")
 
     # Embolden
     parsed_text = re.sub(r"\*\*(.+)\*\*", lambda x: "<b>" + x.group(1) + "</b>", parsed_text)
+    parsed_text = re.sub(r"__(.+)__", lambda x: "<i>" + x.group(1) + "</i>", parsed_text)
+
+    # Italicize
+    parsed_text = re.sub(r"\*(.+)\*", lambda x: "<i>" + x.group(1) + "</i>", parsed_text)
+    parsed_text = re.sub(r"_(.+)_", lambda x: "<i>" + x.group(1) + "</i>", parsed_text)
 
     # Replace urls
     parsed_text = re.sub(r"\[(.+?)\]\((.+?)\)", lambda x: "<a target='_blank' rel='noopener' href=\"" + x.group(2) + "\">" + x.group(1) + "</a>", parsed_text)
