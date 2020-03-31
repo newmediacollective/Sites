@@ -53,6 +53,60 @@ class Post(abc.ABC):
         return json.dumps(self.to_json(), sort_keys = True, indent = 4)
 
 #
+# TextPost
+#
+
+class TextPost(Post):
+    def __init__(self, post_id, text_posts_dir, text_filename, date, location):
+        super().__init__(post_id)
+
+        self.text_posts_dir = text_posts_dir
+        self.text_filename = text_filename
+        self.date = date
+        self.location = location
+
+    @staticmethod
+    def from_json(text_posts_dir, post_json):
+        return TextPost(
+            post_id = post_json["id"],
+            text_posts_dir = text_posts_dir,
+            text_filename = post_json["text_filename"],
+            date = post_json["date"],
+            location = post_json.get("location")
+        )
+
+    def to_json(self):
+        return {
+            "id": self.post_id,
+            "type": "text",
+            "text_filename": self.text_filename,
+            "date": self.date,
+            "location": self.location,
+        }
+
+    def to_html(self, date_format):
+        with open(join(self.text_posts_dir, self.text_filename), "r") as text_file:
+            text = text_file.read()
+            parsed_text = parse_full_markdown(text)
+
+        formatted_date = self.format_date(date_format)
+
+        html = f"""
+    <div class="text_post" id="{self.post_id}">
+        <div class="text">{parsed_text}</div>
+    """
+
+        if self.location:
+            html += f"""
+        <p class="location">{self.location}</p>
+        """
+
+        return html + f"""
+        <p class="date">{formatted_date}</p>
+        <p class="permalink"><a href="../posts/{self.post_id}">∞</a></p>
+    </div>"""
+
+#
 # ImagePost
 #
 
@@ -166,60 +220,6 @@ class VideoPost(Post):
             html += f"""
         <p class="location">{self.location}</p>
     """
-
-        return html + f"""
-        <p class="date">{formatted_date}</p>
-        <p class="permalink"><a href="../posts/{self.post_id}">∞</a></p>
-    </div>"""
-
-#
-# TextPost
-#
-
-class TextPost(Post):
-    def __init__(self, post_id, text_posts_dir, text_filename, date, location):
-        super().__init__(post_id)
-
-        self.text_posts_dir = text_posts_dir
-        self.text_filename = text_filename
-        self.date = date
-        self.location = location
-
-    @staticmethod
-    def from_json(text_posts_dir, post_json):
-        return TextPost(
-            post_id = post_json["id"],
-            text_posts_dir = text_posts_dir,
-            text_filename = post_json["text_filename"],
-            date = post_json["date"],
-            location = post_json.get("location")
-        )
-
-    def to_json(self):
-        return {
-            "id": self.post_id,
-            "type": "text",
-            "text_filename": self.text_filename,
-            "date": self.date,
-            "location": self.location,
-        }
-
-    def to_html(self, date_format):
-        with open(join(self.text_posts_dir, self.text_filename), "r") as text_file:
-            text = text_file.read()
-            parsed_text = parse_full_markdown(text)
-
-        formatted_date = self.format_date(date_format)
-
-        html = f"""
-    <div class="text_post" id="{self.post_id}">
-        <div class="text">{parsed_text}</div>
-    """
-
-        if self.location:
-            html += f"""
-        <p class="location">{self.location}</p>
-        """
 
         return html + f"""
         <p class="date">{formatted_date}</p>

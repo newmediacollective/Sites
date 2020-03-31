@@ -37,6 +37,46 @@ def handle_401(error):
 def handle_500(error):
     return ({ "error": "internal server error" }, 500)
 
+@app.route("/post_text", methods=["POST"])
+def handle_post_text():
+    # Authenticate
+    (sitename, authenticate_error) = authenticate_post_request(request)
+    if authenticate_error is not None:
+        abort(authenticate_error)
+
+    # Get the request parameters
+    if not request.form or not request.files:
+        abort(400)
+
+    text = request.files.get("text")
+    if not text:
+        abort(400)
+
+    location = request.form.get("location")
+    if not location or len(location) == 0:
+        location = None
+
+    # Save text to temporary file
+    if not os.path.exists(tmp_dir):
+        os.makedirs(tmp_dir)
+
+    tmp_text_path = join(tmp_dir, text.filename)
+    text.save(tmp_text_path)
+
+    # Create post
+    try:
+        content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
+        post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location)
+    except Exception as error:
+        print(error)
+        abort(500)
+
+    # Clean up temporary file
+    os.remove(tmp_text_path)
+
+    # Respond
+    return (post.to_json(), 201)
+
 @app.route("/post_image", methods=["POST"])
 def handle_post_image():
     # Authenticate
@@ -81,8 +121,8 @@ def handle_post_image():
     # Respond
     return (post.to_json(), 201)
 
-@app.route("/post_text", methods=["POST"])
-def handle_post_text():
+@app.route("/post_video", methods=["POST"])
+def handle_post_video():
     # Authenticate
     (sitename, authenticate_error) = authenticate_post_request(request)
     if authenticate_error is not None:
@@ -92,31 +132,35 @@ def handle_post_text():
     if not request.form or not request.files:
         abort(400)
 
-    text = request.files.get("text")
-    if not text:
+    video = request.files.get("video")
+    if not video:
         abort(400)
+
+    caption = request.form.get("caption")
+    if not caption or len(caption) == 0:
+        caption = None
 
     location = request.form.get("location")
     if not location or len(location) == 0:
         location = None
 
-    # Save text to temporary file
+    # Save image to temporary file
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
 
-    tmp_text_path = join(tmp_dir, text.filename)
-    text.save(tmp_text_path)
+    tmp_video_path = join(tmp_dir, video.filename)
+    video.save(tmp_video_path)
 
     # Create post
     try:
         content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
-        post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location)
+        post = content_manager.create_video_post(video_path = tmp_video_path, caption = caption, location = location)
     except Exception as error:
         print(error)
         abort(500)
 
     # Clean up temporary file
-    os.remove(tmp_text_path)
+    os.remove(tmp_video_path)
 
     # Respond
     return (post.to_json(), 201)

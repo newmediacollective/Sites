@@ -57,6 +57,23 @@ class ContentManager:
         self.index_path = join(self.views_dir, "index.html")
         self.error_path = join(self.views_dir, "error.html")
 
+    def create_text_post(self, text_file_path, location):
+        text_file_id = str(uuid4())
+
+        # Copy the original text file to the text_posts directory
+        copied_text_filename = text_file_id + text_file_extension
+        copied_text_file_path = join(self.text_posts_dir, copied_text_filename)
+        shutil.copy(text_file_path, copied_text_file_path)
+
+        # Create post
+        properties = self.get_properties()
+        date = datetime.now().strftime(stored_date_format)
+        post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_filename = copied_text_filename, date = date, location = location)
+
+        # Add post
+        self.add_post_and_update(post)
+        return post
+
     def create_image_post(self, image_path, caption, location):
         # Optimize image
         image_id = str(uuid4())
@@ -75,7 +92,7 @@ class ContentManager:
         return post
 
     def create_video_post(self, video_path, caption, location):
-        # Optimize image
+        # Optimize video
         video_id = str(uuid4())
         optimized_video_filename = video_id + video_file_extension
         optimized_video_path = join(self.videos_dir, optimized_video_filename)
@@ -95,23 +112,6 @@ class ContentManager:
         properties = self.get_properties()
         date = datetime.now().strftime(stored_date_format)
         post = VideoPost(post_id = str(uuid4()), video_filename = optimized_video_filename, thumbnail_filename = thumbnail_filename, caption = caption, date = date, location = location)
-
-        # Add post
-        self.add_post_and_update(post)
-        return post
-
-    def create_text_post(self, text_file_path, location):
-        text_file_id = str(uuid4())
-
-        # Copy the original text file to the text_posts directory
-        copied_text_filename = text_file_id + text_file_extension
-        copied_text_file_path = join(self.text_posts_dir, copied_text_filename)
-        shutil.copy(text_file_path, copied_text_file_path)
-
-        # Create post
-        properties = self.get_properties()
-        date = datetime.now().strftime(stored_date_format)
-        post = TextPost(post_id = str(uuid4()), text_posts_dir = self.text_posts_dir, text_filename = copied_text_filename, date = date, location = location)
 
         # Add post
         self.add_post_and_update(post)

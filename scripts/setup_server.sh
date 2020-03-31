@@ -32,6 +32,11 @@ sudo apt-get install -y software-properties-common certbot python-certbot-nginx
 sudo apt-get install -y imagemagick
 
 #
+# FFmpeg
+#
+sudo apt-get install -y ffmpeg
+
+#
 # Python
 #
 sudo apt-get install -y python3-pip python3-dev python3-setuptools python3-venv build-essential libssl-dev libffi-dev
