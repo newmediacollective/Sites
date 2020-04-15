@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>{title}</title>
+    <!-- Meta -->
     <meta charset="UTF-8">
-    <meta name="description" content="{description}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Info -->
+    <title>{site_title}</title>
+    <meta name="description" content="{description}">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{site_title}">
+    <meta property="og:description" content="{description}">
+    <meta property="og:image" content="../icons/high-res-{icon_version}.png">
+
+    <!-- Icons -->
+    <link rel="icon" href="../icons/favicon-{icon_version}.png">
+    <link rel="shortcut icon" href="../icons/favicon-{icon_version}.png">
+    <link rel="apple-touch-icon" href="../icons/apple-touch-icon-{icon_version}.png">
+    <link rel="apple-touch-icon-precomposed" href="../icons/apple-touch-icon-{icon_version}.png">
+
+    <!-- Styles -->
     <link rel="stylesheet" href="../styles/main.css">
-    <link rel="icon" href="../icons/favicon.png">
-    <link rel="shortcut icon" href="../icons/favicon.png">
-    <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
-    <link rel="apple-touch-icon-precomposed" href="../icons/apple-touch-icon.png">
   </head>
   <body role="main">
-    <p class="title"><a href="/">{title}</a></p>
-    <p class="subtitle">{description}</p>
-{posts}
+<!-- Header -->
+    <p class="title">{display_title}</p>
+    <p class="subtitle">{subtitle}</p>
+
+    <!-- Posts -->
+    {posts}
+
+    <!-- Footer -->
     <div>
-        <img class="footer_image" src="../icons/favicon.png">
+        <img class="footer_image" src="../icons/favicon-{icon_version}.png">
     </div>
+
+    <!-- Video Control Script -->
     <script>
         function showVideoControls(video_element) {
             video_element.controls = true;
