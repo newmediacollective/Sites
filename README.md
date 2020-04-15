@@ -101,7 +101,7 @@ Configure the server:
   sign tokens
   - To post to your site, you'll need to provide a valid token (more on that
     later)
-- You can update your site's title and description in the
+- You can update your site's title, description, and other information in the
   `app/sites/{host}/data/properties.json` file
 
 **5. Encrypt the traffic**
@@ -199,9 +199,11 @@ Fill in the `app/sites/{host}/content/icons` directory with the following files
 so your site will automatically serve a favicon and Apple touch icon:
 
 ```
-favicon.png (64x64)
-apple-touch-icon.png (180x180)
+favicon-0.png (64x64)
+apple-touch-icon-0.png (180x180)
 ```
+
+If you ever need to update them, simply bump the number to 1, 2, 3, etc, and update the `icon_version` in `properties.json`.
 
 ### Regenerating Sites
 
@@ -219,7 +221,7 @@ on different servers if you prefer).
 **1. Create a new site on your server**
 
 ```
-[server][env]$ python app/site_manager.py create -s "{new_host}" -t "new site title" -d "new site description" -f "date format"
+[server][env]$ python app/site_manager.py create -s "{new_host}" -t "new site title"
 ```
 
 **2. Encrypt the traffic**
