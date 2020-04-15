@@ -116,24 +116,6 @@ p.md_header {
 }
 
 /*
-  Recording Post Styling
-*/
-.recording_post {
-  text-align: center;
-  width: 100%;
-  margin-top: 45pt;
-  margin-bottom: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.recording_post video {
-  max-height: 380pt;
-  max-width: 100%;
-  margin-bottom: 15pt;
-}
-
-/*
   Caption Styling
 */
 .caption {
@@ -235,11 +217,11 @@ p.md_header {
     max-width: 80%;
   }
 
-  .image_post, .video_post, .recording_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption, .video_post .caption, .recording_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 100%;
   }
 }
@@ -250,11 +232,11 @@ p.md_header {
     max-width: 80%;
   }
 
-  .image_post, .video_post, .recording_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption, .video_post .caption, .recording_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 100%;
   }
 }
@@ -265,11 +247,11 @@ p.md_header {
     max-width: 60%;
   }
 
-  .image_post, .video_post, .recording_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption, .video_post .caption, .recording_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
@@ -280,11 +262,11 @@ p.md_header {
     max-width: 40%;
   }
 
-  .image_post, .video_post, .recording_post {
+  .image_post, .video_post {
     width: 60%;
   }
 
-  .image_post .caption, .video_post .caption, .recording_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
@@ -295,11 +277,11 @@ p.md_header {
     max-width: 30%;
   }
 
-  .image_post, .video_post, .recording_post {
+  .image_post, .video_post {
     width: 60%;
   }
 
-  .image_post .caption, .video_post .caption, .recording_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
