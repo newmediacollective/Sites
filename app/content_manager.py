@@ -144,6 +144,7 @@ class ContentManager:
     #
     # Utilities
     #
+
     def get_properties(self):
         with open(self.properties_path, "r") as properties_file:
             properties_json = json.load(properties_file)

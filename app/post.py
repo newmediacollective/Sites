@@ -50,6 +50,7 @@ class Post(abc.ABC):
 #
 
 class TextPost(Post):
+
     def __init__(self, post_id, text_posts_dir, text_filename, location, date):
         super().__init__(post_id)
 
@@ -110,6 +111,7 @@ class TextPost(Post):
 #
 
 class ImagePost(Post):
+
     def __init__(self, post_id, image_filename, caption, location, date):
         super().__init__(post_id)
         self.image_filename = image_filename
@@ -182,6 +184,7 @@ class ImagePost(Post):
 #
 
 class VideoPost(Post):
+
     def __init__(self, post_id, video_filename, thumbnail_filename, caption, location, date):
         super().__init__(post_id)
         self.video_filename = video_filename
