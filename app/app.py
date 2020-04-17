@@ -6,11 +6,12 @@ import os
 import jwt
 import json
 
-from content_manager import ContentManager
 from os.path import join
 from uuid import uuid4
 from flask import Flask, request, abort
-from post import Post
+
+from content_manager import ContentManager
+from post import *
 
 app = Flask(__name__)
 
@@ -40,7 +41,7 @@ def handle_500(error):
 @app.route("/post_text", methods=["POST"])
 def handle_post_text():
     # Authenticate
-    (sitename, authenticate_error) = authenticate_post_request(request)
+    (host, authenticate_error) = authenticate_post_request(request)
     if authenticate_error is not None:
         abort(authenticate_error)
 
@@ -65,7 +66,7 @@ def handle_post_text():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
+        content_manager = ContentManager(app_dir = app.root_path, host = host)
         post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location)
     except Exception as error:
         print(error)
@@ -80,7 +81,7 @@ def handle_post_text():
 @app.route("/post_image", methods=["POST"])
 def handle_post_image():
     # Authenticate
-    (sitename, authenticate_error) = authenticate_post_request(request)
+    (host, authenticate_error) = authenticate_post_request(request)
     if authenticate_error is not None:
         abort(authenticate_error)
 
@@ -109,7 +110,7 @@ def handle_post_image():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
+        content_manager = ContentManager(app_dir = app.root_path, host = host)
         post = content_manager.create_image_post(image_path = tmp_image_path, caption = caption, location = location)
     except Exception as error:
         print(error)
@@ -124,7 +125,7 @@ def handle_post_image():
 @app.route("/post_video", methods=["POST"])
 def handle_post_video():
     # Authenticate
-    (sitename, authenticate_error) = authenticate_post_request(request)
+    (host, authenticate_error) = authenticate_post_request(request)
     if authenticate_error is not None:
         abort(authenticate_error)
 
@@ -153,7 +154,7 @@ def handle_post_video():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, sitename = sitename)
+        content_manager = ContentManager(app_dir = app.root_path, host = host)
         post = content_manager.create_video_post(video_path = tmp_video_path, caption = caption, location = location)
     except Exception as error:
         print(error)
@@ -171,17 +172,20 @@ def handle_post_video():
 
 def authenticate_post_request(request):
     if app.debug:
-        sitename = request.headers.get("Sitename")
-        if not sitename:
+        request_host = request.headers.get("Host")
+
+        if not request_host:
             return (None, 400)
+
+        host = request_host
     else:
         bearer = request.headers.get("Authorization")
         if not bearer:
             return (None, 401)
 
-        host = request.host
+        request_host = request.host
 
-        site_dir = join(sites_dir, host)
+        site_dir = join(sites_dir, request_host)
         secret_path = join(site_dir, "secret.txt")
 
         with open(secret_path, "r") as secret_file:
@@ -196,11 +200,14 @@ def authenticate_post_request(request):
         except:
             return (None, 401)
 
-        sitename = payload.get("sitename")
-        if sitename != host:
+        payload_host = payload.get("host")
+
+        if request_host != payload_host:
             return (None, 401)
 
-    return (sitename, None)
+        host = payload_host
+
+    return (host, None)
 #
 # Main
 #

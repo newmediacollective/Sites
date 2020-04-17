@@ -11,6 +11,8 @@ import shutil
 from subprocess import check_call, PIPE
 from os.path import dirname, join, exists
 
+from properties import *
+
 #
 # Constants
 #
@@ -20,14 +22,14 @@ sites_dir = join(app_dir, "sites")
 #
 # Methods
 #
-def create(sitename, title, description, date_format):
+def create(host, title):
     if not exists(sites_dir):
         os.makedirs(sites_dir)
 
-    site_dir = join(sites_dir, sitename)
+    site_dir = join(sites_dir, host)
 
     if exists(site_dir):
-        print(f"Error: {sitename} already exists")
+        print(f"Error: {host} already exists")
         sys.exit(2)
     else:
         os.mkdir(site_dir)
@@ -65,7 +67,7 @@ def create(sitename, title, description, date_format):
     shutil.copy(join(content_template_dir, "robots.txt"), content_dir)
 
     with open(join(content_template_dir, "sitemap.txt"), "r") as sitemap_template_file:
-        sitemap = sitemap_template_file.read().replace("{host}", sitename)
+        sitemap = sitemap_template_file.read().replace("{host}", host)
 
         with open(join(content_dir, "sitemap.txt"), "w") as sitemap_file:
             sitemap_file.write(sitemap)
@@ -76,14 +78,10 @@ def create(sitename, title, description, date_format):
     data_dir = join(site_dir, "data")
     os.makedirs(data_dir)
 
-    with open(join(data_dir, "properties.json"), "w") as properties_file:
-        properties = {
-            "title": title,
-            "description": description,
-            "date_format": date_format
-        }
+    properties = Properties.default(title = title)
 
-        json.dump(properties, properties_file, sort_keys = True, indent = 4)
+    with open(join(data_dir, "properties.json"), "w") as properties_file:
+        properties_file.write(str(properties))
 
     os.makedirs(join(data_dir, "text_posts"))
 
@@ -91,12 +89,12 @@ def update_nginx():
     with open(join(app_dir, "../template/config/server.conf"), "r") as server_block_template_file:
         server_block_template = server_block_template_file.read()
 
-    sitenames = [sitename for sitename in os.listdir(sites_dir) if os.path.isdir(join(sites_dir, sitename))]
+    hosts = [host for host in os.listdir(sites_dir) if os.path.isdir(join(sites_dir, host))]
 
     server_blocks = []
-    for sitename in sitenames:
-        print(f"> Configuring {sitename}")
-        server_block = server_block_template.replace("{host}", sitename)
+    for host in hosts:
+        print(f"> Configuring {host}")
+        server_block = server_block_template.replace("{host}", host)
         server_blocks.append(server_block)
 
     with open(join(app_dir, "../template/config/nginx.conf"), "r") as nginx_conf_template_file:
@@ -107,18 +105,17 @@ def update_nginx():
 
 def main(argv):
     usage = "Usage:\n"
-    usage += "> python3 site_manager.py create -s sitename -t title -d description -f date_format"
-    usage += "> python3 site_manager.py update_nginx"
+    usage += "    python3 site_manager.py create -s <host> -t title"
+    usage += "    python3 site_manager.py update_nginx"
 
     if len(argv) == 0:
         print(usage)
         sys.exit(2)
 
     action_name = argv[0]
-    sitename = None
+
+    host = None
     title = None
-    description = None
-    date_format = "(%b %-d %Y)"
 
     try:
         opts, args = getopt.getopt(argv[1:],"s:t:d:f:")
@@ -128,13 +125,9 @@ def main(argv):
 
     for opt, arg in opts:
         if opt == "-s":
-            sitename = arg
+            host = arg
         elif opt == "-t":
             title = arg
-        elif opt == "-d":
-            description = arg
-        elif opt == "-f":
-            date_format = arg
         else:
             print(f"Error: unrecognized option\n{usage}")
             sys.exit(2)
@@ -143,7 +136,7 @@ def main(argv):
         print(usage)
         sys.exit()
     elif action_name == "create":
-        create(sitename = sitename, title = title, description = description, date_format = date_format)
+        create(host = host, title = title)
     elif action_name == "update_nginx":
         update_nginx()
     else:

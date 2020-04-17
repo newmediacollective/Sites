@@ -13,7 +13,7 @@ body {
   Title Styling
 */
 .title {
-  font-size: medium;
+  font-size: 12pt;
   color: #595959;
   text-align: center;
   margin-top: 40pt;
@@ -30,11 +30,11 @@ body {
   Subtitle Styling
 */
 .subtitle {
-  font-size: small;
+  font-size: 10pt;
   color: #999999;
   text-align: center;
   margin-top: 0;
-  margin-bottom: 40pt;
+  margin-bottom: -10pt;
   margin-left: 0;
   margin-right: 0;
 }
@@ -44,7 +44,7 @@ body {
 */
 a, a:visited {
     text-decoration: none;
-    color: #5A73BF;
+    color: #2B580C;
 }
 
 /*
@@ -52,12 +52,12 @@ a, a:visited {
 */
 .text_post {
   display: block;
-  font-size: small;
+  font-size: 10pt;
   color: #595959;
   text-align: left;
   line-height: 1.5;
-  margin-top: 0;
-  margin-bottom: 45pt;
+  margin-top: 45pt;
+  margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
 }
@@ -74,8 +74,8 @@ p.md_header {
   Image Post Styling
 */
 .image_post {
-  margin-top: 0;
-  margin-bottom: 45pt;
+  margin-top: 45pt;
+  margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
 }
@@ -103,8 +103,8 @@ p.md_header {
 .video_post {
   text-align: center;
   width: 100%;
-  margin-top: 0;
-  margin-bottom: 45pt;
+  margin-top: 45pt;
+  margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
 }
@@ -120,7 +120,7 @@ p.md_header {
 */
 .caption {
   display: block;
-  font-size: small;
+  font-size: 10pt;
   color: #595959;
   text-align: center;
   line-height: 1.5;
@@ -131,10 +131,36 @@ p.md_header {
 }
 
 /*
+  Instrumentation Styling
+*/
+.instrumentation {
+  font-size: 10pt;
+  color: #999999;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 5pt;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
+  Duration Styling
+*/
+.duration {
+  font-size: 10pt;
+  color: #999999;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/*
   Location Styling
 */
 .location {
-  font-size: small;
+  font-size: 10pt;
   color: #999999;
   text-align: center;
   margin-top: 0;
@@ -147,7 +173,7 @@ p.md_header {
   Date Styling
 */
 .date {
-  font-size: small;
+  font-size: 10pt;
   color: #999999;
   text-align: center;
   margin-top: 0;
@@ -160,7 +186,8 @@ p.md_header {
   Permalink Styling
 */
 .permalink {
-  font-size: large;
+  font-size: 16pt;
+  font-family: "menlo", "andale mono", "courier new", sans-serif;
   text-align: center;
   margin-top: 3pt;
   margin-bottom: 0;
@@ -174,7 +201,7 @@ p.md_header {
 .footer_image {
   display: block;
   width: 40px;
-  margin-top: 0;
+  margin-top: 20pt;
   margin-bottom: 40pt;
   margin-left: auto;
   margin-right: auto;
@@ -190,19 +217,11 @@ p.md_header {
     max-width: 80%;
   }
 
-  .image_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption {
-    max-width: 100%;
-  }
-
-  .video_post {
-    width: 80%;
-  }
-
-  .video_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 100%;
   }
 }
@@ -213,19 +232,11 @@ p.md_header {
     max-width: 80%;
   }
 
-  .image_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption {
-    max-width: 100%;
-  }
-
-  .video_post {
-    width: 80%;
-  }
-
-  .video_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 100%;
   }
 }
@@ -236,19 +247,11 @@ p.md_header {
     max-width: 60%;
   }
 
-  .image_post {
+  .image_post, .video_post {
     width: 80%;
   }
 
-  .image_post .caption {
-    max-width: 60%;
-  }
-
-  .video_post {
-    width: 80%;
-  }
-
-  .video_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
@@ -259,19 +262,11 @@ p.md_header {
     max-width: 40%;
   }
 
-  .image_post {
+  .image_post, .video_post {
     width: 60%;
   }
 
-  .image_post .caption {
-    max-width: 60%;
-  }
-
-  .video_post {
-    width: 60%;
-  }
-
-  .video_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
@@ -282,19 +277,11 @@ p.md_header {
     max-width: 30%;
   }
 
-  .image_post {
+  .image_post, .video_post {
     width: 60%;
   }
 
-  .image_post .caption {
-    max-width: 60%;
-  }
-
-  .video_post {
-    width: 60%;
-  }
-
-  .video_post .caption {
+  .image_post .caption, .video_post .caption {
     max-width: 60%;
   }
 }
