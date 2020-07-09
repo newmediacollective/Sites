@@ -3,7 +3,6 @@ Sites
 
 In a few minutes you can have your own HTTPS, responsive site hosting text, photos, and videos.
 
-Here's an [example site](https://newmediacollective.org) made with these tools.
 
 Getting Started
 ---------------
