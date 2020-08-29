@@ -22,9 +22,8 @@ sudo ufw allow "Nginx Full"
 # LetsEncrypt
 #
 sudo add-apt-repository -y universe
-sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt-get update
-sudo apt-get install -y software-properties-common certbot python-certbot-nginx
+sudo apt-get install -y software-properties-common certbot python3-certbot-nginx
 
 #
 # ImageMagick
