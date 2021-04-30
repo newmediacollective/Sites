@@ -74,7 +74,7 @@ Configure the server:
 
 # You'll be prompted to update your password - do so, then log in again
 
-[server]$ git clone git@github.com:newmediacollective/Sites.git
+[server]$ git clone https://github.com/newmediacollective/Sites.git
 [server]$ cd Sites
 [server]$ source scripts/setup_server.sh
 ```

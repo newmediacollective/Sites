@@ -318,6 +318,8 @@ def create(content_manager, argv):
         location = input("Location: ")
         if len(location) == 0:
             location = None
+
+        content_manager.create_video_post(content_file_path, caption, location)
     else:
         fuck_off()
 
