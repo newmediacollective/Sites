@@ -2,11 +2,12 @@
 # content_manager.py
 #
 
-import os
-import sys
-import json
+import datetime
 import getopt
+import json
+import os
 import shutil
+import sys
 
 from subprocess import check_call, PIPE
 from os.path import splitext, join, exists, dirname
@@ -66,8 +67,14 @@ class ContentManager:
     # Creating Posts
     #
 
-    def create_text_post(self, text_file_path, location):
+    def create_text_post(self, text_file_path, location, date):
         text_file_id = str(uuid4())
+
+        # Convert date if needed
+        if date is None:
+            date = datetime.now()
+        else:
+            date = datetime.strptime(date, "%Y-%m-%d")
 
         # Copy the original text file to the text_posts directory
         copied_text_filename = text_file_id + text_file_extension
@@ -80,15 +87,21 @@ class ContentManager:
             text_posts_dir = self.text_posts_dir,
             text_filename = copied_text_filename,
             location = location,
-            date = datetime.now()
+            date = date
         )
 
         self.add_post_and_update(post = post)
 
         return post
 
-    def create_image_post(self, image_path, caption, location):
+    def create_image_post(self, image_path, caption, location, date):
         image_id = str(uuid4())
+
+        # Convert date if needed
+        if date is None:
+            date = datetime.now()
+        else:
+            date = datetime.strptime(date, "%Y-%m-%d")
 
         # Optimize image
         optimized_image_filename = image_id + image_file_extension
@@ -102,15 +115,21 @@ class ContentManager:
             image_filename = optimized_image_filename,
             caption = caption,
             location = location,
-            date = datetime.now()
+            date = date
         )
 
         self.add_post_and_update(post = post)
 
         return post
 
-    def create_video_post(self, video_path, caption, location):
+    def create_video_post(self, video_path, caption, location, date):
         video_id = str(uuid4())
+
+        # Convert date if needed
+        if date is None:
+            date = datetime.now()
+        else:
+            date = datetime.strptime(date, "%Y-%m-%d")
 
         # Optimize video
         optimized_video_filename = video_id + video_file_extension
@@ -134,7 +153,7 @@ class ContentManager:
             thumbnail_filename = thumbnail_filename,
             caption = caption,
             location = location,
-            date = datetime.now()
+            date = date
         )
 
         self.add_post_and_update(post = post)
@@ -303,13 +322,21 @@ def create(content_manager, argv):
         if len(location) == 0:
             location = None
 
-        content_manager.create_image_post(content_file_path, caption, location)
+        date = input("Date: ")
+        if len(date) == 0:
+            date = None
+
+        content_manager.create_image_post(content_file_path, caption, location, date)
     elif post_type == "text":
         location = input("Location: ")
         if len(location) == 0:
             location = None
 
-        content_manager.create_text_post(content_file_path, location)
+        date = input("Date: ")
+        if len(date) == 0:
+            date = None
+
+        content_manager.create_text_post(content_file_path, location, date)
     elif post_type == "video":
         caption = input("Caption: ")
         if len(caption) == 0:
@@ -319,7 +346,11 @@ def create(content_manager, argv):
         if len(location) == 0:
             location = None
 
-        content_manager.create_video_post(content_file_path, caption, location)
+        date = input("Date: ")
+        if len(date) == 0:
+            date = None
+
+        content_manager.create_video_post(content_file_path, caption, location, date)
     else:
         fuck_off()
 

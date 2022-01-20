@@ -1,7 +1,8 @@
 Sites
 =====
 
-In a few minutes you can have your own HTTPS, responsive site hosting text, photos, and videos.
+In a few minutes you can have your own HTTPS, responsive site hosting text,
+photos, and videos.
 
 
 Getting Started
@@ -202,7 +203,8 @@ favicon-0.png (64x64)
 apple-touch-icon-0.png (180x180)
 ```
 
-If you ever need to update them, simply bump the number to 1, 2, 3, etc, and update the `icon_version` in `properties.json`.
+If you ever need to update them, simply bump the number to 1, 2, 3, etc, and
+update the `icon_version` in `properties.json`.
 
 ### Regenerating Sites
 
@@ -264,7 +266,8 @@ Caveats
 -------
 
 The site design is simple and inflexible, but there are already plenty of tools
-for managing complex sites. This solves the problem of posting text, photos, and videos to an https site and serving them as static content.
+for managing complex sites. This solves the problem of posting text, photos, and
+videos to an https site and serving them as static content.
 
 That said, feel free to fork the project and mess around with the `template`
 directory - there are CSS files in `template/content/styles`. Restructuring the
