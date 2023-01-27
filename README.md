@@ -188,9 +188,9 @@ To create a post locally, use:
 
 To post directly to your server, use:
 ```
-[local]$ ./scripts/post_text.sh {host} /path/to/text.md "location"
-[local]$ ./scripts/post_image.sh {host} /path/to/image.jpg "caption" "location"
-[local]$ ./scripts/post_video.sh {host} /path/to/video.mp4 "caption" "location"
+[local]$ ./scripts/post_text.sh {host} /path/to/text.md "location" "date"
+[local]$ ./scripts/post_image.sh {host} /path/to/image.jpg "caption" "location" "date"
+[local]$ ./scripts/post_video.sh {host} /path/to/video.mp4 "caption" "location" "date"
 ```
 
 ### Icons
@@ -254,9 +254,9 @@ You can open your site locally with:
 
 You can test posting directly to the server locally with:
 ```
-[local]$ ./scripts/post_text_local.sh {host} /path/to/text.md "location"
-[local]$ ./scripts/post_image_local.sh {host} /path/to/image.jpg "caption" "location"
-[local]$ ./scripts/post_video_local.sh {host} /path/to/video.mp4 "caption" "location"
+[local]$ ./scripts/post_text_local.sh {host} /path/to/text.md "location" "date"
+[local]$ ./scripts/post_image_local.sh {host} /path/to/image.jpg "caption" "location" "date"
+[local]$ ./scripts/post_video_local.sh {host} /path/to/video.mp4 "caption" "location" "date"
 ```
 
 **Note:** Individual post pages don't work locally because they rely on nginx to

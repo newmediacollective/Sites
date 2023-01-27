@@ -57,6 +57,10 @@ def handle_post_text():
     if not location or len(location) == 0:
         location = None
 
+    date = request.form.get("date")
+    if not date or len(date) == 0:
+        date = None
+
     # Save text to temporary file
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
@@ -67,7 +71,7 @@ def handle_post_text():
     # Create post
     try:
         content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location)
+        post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location, date = date)
     except Exception as error:
         print(error)
         abort(500)
@@ -149,6 +153,10 @@ def handle_post_video():
     if not location or len(location) == 0:
         location = None
 
+    date = request.form.get("date")
+    if not date or len(date) == 0:
+        date = None
+
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
@@ -159,7 +167,7 @@ def handle_post_video():
     # Create post
     try:
         content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_video_post(video_path = tmp_video_path, caption = caption, location = location)
+        post = content_manager.create_video_post(video_path = tmp_video_path, caption = caption, location = location, date = date)
     except Exception as error:
         print(error)
         abort(500)
