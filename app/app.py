@@ -208,6 +208,33 @@ def handle_delete_post():
     # Respond
     return ({ "message": "post deleted" }, 201)
 
+@app.route("/update_properties", methods=["POST"])
+def handle_update_properties():
+    # Authenticate
+    (host, authenticate_error) = authenticate_post_request(request)
+    if authenticate_error is not None:
+        abort(authenticate_error)
+
+    # Get the request parameters
+    if not request.form:
+        abort(400)
+
+    properties_to_update = request.form.to_dict()
+
+    # Update properties
+    try:
+        content_manager = ContentManager(app_dir=app.root_path, host=host)
+        content_manager.update_properties(properties_to_update)
+    except KeyError as error:
+        print(error)
+        abort(400)
+    except Exception as error:
+        print(error)
+        abort(500)
+
+    # Respond
+    return (content_manager.get_properties().to_json(), 201)
+
 #
 # Authentication
 #
