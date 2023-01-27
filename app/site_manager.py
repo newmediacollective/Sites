@@ -16,12 +16,14 @@ from properties import *
 #
 # Constants
 #
+
 app_dir = dirname(os.path.realpath(__file__))
 sites_dir = join(app_dir, "sites")
 
 #
 # Methods
 #
+
 def create(host, title):
     if not exists(sites_dir):
         os.makedirs(sites_dir)
@@ -37,6 +39,7 @@ def create(host, title):
     #
     # Secret
     #
+
     secret_path = join(site_dir, "secret.txt")
 
     try:
@@ -47,11 +50,13 @@ def create(host, title):
     #
     # Templates
     #
+
     shutil.copytree(join(app_dir, "../template/templates"), join(site_dir, "templates"))
 
     #
     # Content
     #
+
     content_dir = join(site_dir, "content")
 
     os.makedirs(join(content_dir, "icons"))
@@ -75,6 +80,7 @@ def create(host, title):
     #
     # Data
     #
+
     data_dir = join(site_dir, "data")
     os.makedirs(data_dir)
 

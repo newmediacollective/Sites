@@ -70,8 +70,8 @@ def handle_post_text():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_text_post(text_file_path = tmp_text_path, location = location, date = date)
+        content_manager = ContentManager(app_dir=app.root_path, host=host)
+        post = content_manager.create_text_post(text_file_path=tmp_text_path, location=location, date=date)
     except Exception as error:
         print(error)
         abort(500)
@@ -118,8 +118,8 @@ def handle_post_image():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_image_post(image_path = tmp_image_path, caption = caption, location = location, date = date)
+        content_manager = ContentManager(app_dir=app.root_path, host=host)
+        post = content_manager.create_image_post(image_path=tmp_image_path, caption=caption, location=location, date=date)
     except Exception as error:
         print(error)
         abort(500)
@@ -166,8 +166,8 @@ def handle_post_video():
 
     # Create post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_video_post(video_path = tmp_video_path, caption = caption, location = location, date = date)
+        content_manager = ContentManager(app_dir=app.root_path, host=host)
+        post = content_manager.create_video_post(video_path=tmp_video_path, caption=caption, location=location, date=date)
     except Exception as error:
         print(error)
         abort(500)
@@ -195,7 +195,7 @@ def handle_delete_post():
 
     # Delete post
     try:
-        content_manager = ContentManager(app_dir = app.root_path, host = host)
+        content_manager = ContentManager(app_dir=app.root_path, host=host)
         post = content_manager.find_post(post_id)
         if post is None:
             abort(400)
