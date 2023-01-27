@@ -178,6 +178,36 @@ def handle_post_video():
     # Respond
     return (post.to_json(), 201)
 
+@app.route("/delete_post", methods=["POST"])
+def handle_delete_post():
+    # Authenticate
+    (host, authenticate_error) = authenticate_post_request(request)
+    if authenticate_error is not None:
+        abort(authenticate_error)
+
+    # Get the request parameters
+    if not request.form:
+        abort(400)
+
+    post_id = request.form.get("post_id")
+    if not post_id or len(post_id) == 0:
+        abort(400)
+
+    # Delete post
+    try:
+        content_manager = ContentManager(app_dir = app.root_path, host = host)
+        post = content_manager.find_post(post_id)
+        if post is None:
+            abort(400)
+
+        content_manager.delete_post(post)
+    except Exception as error:
+        print(error)
+        abort(500)
+
+    # Respond
+    return ({ "message": "post deleted" }, 201)
+
 #
 # Authentication
 #
@@ -220,6 +250,7 @@ def authenticate_post_request(request):
         host = payload_host
 
     return (host, None)
+
 #
 # Main
 #
