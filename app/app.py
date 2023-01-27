@@ -101,6 +101,10 @@ def handle_post_image():
     if not location or len(location) == 0:
         location = None
 
+    date = request.form.get("date")
+    if not date or len(date) == 0:
+        date = None
+
     # Save image to temporary file
     if not os.path.exists(tmp_dir):
         os.makedirs(tmp_dir)
@@ -111,7 +115,7 @@ def handle_post_image():
     # Create post
     try:
         content_manager = ContentManager(app_dir = app.root_path, host = host)
-        post = content_manager.create_image_post(image_path = tmp_image_path, caption = caption, location = location)
+        post = content_manager.create_image_post(image_path = tmp_image_path, caption = caption, location = location, date = date)
     except Exception as error:
         print(error)
         abort(500)
@@ -214,4 +218,4 @@ def authenticate_post_request(request):
 
 if __name__ == "__main__":
     app.debug = True
-    app.run(host="0.0.0.0")
+    app.run(host="127.0.0.1")

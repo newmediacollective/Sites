@@ -107,7 +107,7 @@ class ContentManager:
         optimized_image_filename = image_id + image_file_extension
         optimized_image_path = join(self.images_dir, optimized_image_filename)
 
-        check_call(f"convert '{image_path}' -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace RGB {optimized_image_path}", stderr = PIPE, shell = True)
+        check_call(f"convert '{image_path}' -strip -auto-orient -sampling-factor 4:2:0 -quality 85 -interlace JPEG -colorspace sRGB {optimized_image_path}", stderr = PIPE, shell = True)
 
         # Create post
         post = ImagePost(
