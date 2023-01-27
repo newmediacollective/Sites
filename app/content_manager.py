@@ -64,7 +64,7 @@ class ContentManager:
         self.error_path = join(self.views_dir, "error.html")
 
     #
-    # Creating Posts
+    # Creating and Managing Posts
     #
 
     def create_text_post(self, text_file_path, location, date):
@@ -160,6 +160,34 @@ class ContentManager:
 
         return post
 
+    def delete_post(self, post):
+        if type(post) == TextPost:
+            content_file_path = join(self.text_posts_dir, post.text_filename)
+        elif type(post) == ImagePost:
+            content_file_path = join(self.images_dir, post.image_filename)
+        elif type(post) == VideoPost:
+            content_file_path = join(self.videos_dir, post.video_filename)
+            thumbnail_path = join(self.thumbnails_dir, post.thumbnail_filename)
+            os.remove(thumbnail_path)
+        else:
+            raise TypeError("Unknown post type")
+
+        post_file_name = post.post_id + ".html"
+        post_file_path = join(self.posts_dir, post_file_name)
+
+        os.remove(content_file_path)
+        os.remove(post_file_path)
+
+        posts = self.get_posts()
+        posts = filter(lambda x: (x.post_id != post.post_id), posts)
+
+        post_json = [post.to_json() for post in posts]
+
+        with open(self.posts_path, "w") as posts_file:
+            json.dump(post_json, posts_file, sort_keys = True, indent = 4)
+
+        self.hydrate_templates()
+
     #
     # Utilities
     #
@@ -170,6 +198,20 @@ class ContentManager:
             properties = Properties(properties_json)
 
         return properties
+
+    def update_properties(self, properties_to_update):
+        properties = self.get_properties()
+
+        for key, value in properties_to_update.items():
+            if not hasattr(properties, key):
+                raise KeyError(f"Cannot update unknown properties key: {key}")
+
+            setattr(properties, key, value)
+
+        with open(self.properties_path, "w") as properties_file:
+            properties_file.write(str(properties))
+
+        self.hydrate_templates()
 
     def get_posts(self):
         posts = []
@@ -199,34 +241,6 @@ class ContentManager:
                 return post
 
         return None
-
-    def delete_post(self, post):
-        if type(post) == TextPost:
-            content_file_path = join(self.text_posts_dir, post.text_filename)
-        elif type(post) == ImagePost:
-            content_file_path = join(self.images_dir, post.image_filename)
-        elif type(post) == VideoPost:
-            content_file_path = join(self.videos_dir, post.video_filename)
-            thumbnail_path = join(self.thumbnails_dir, post.thumbnail_filename)
-            os.remove(thumbnail_path)
-        else:
-            raise TypeError("Unknown post type")
-
-        post_file_name = post.post_id + ".html"
-        post_file_path = join(self.posts_dir, post_file_name)
-
-        os.remove(content_file_path)
-        os.remove(post_file_path)
-
-        posts = self.get_posts()
-        posts = filter(lambda x: (x.post_id != post.post_id), posts)
-
-        post_json = [post.to_json() for post in posts]
-
-        with open(self.posts_path, "w") as posts_file:
-            json.dump(post_json, posts_file, sort_keys = True, indent = 4)
-
-        self.hydrate_templates()
 
     #
     # Site Generation
@@ -373,6 +387,21 @@ def delete(content_manager, argv):
     else:
         print("Aborting")
 
+def update_properties(content_manager, argv):
+    if len(argv) < 1:
+        fuck_off()
+
+    properties_to_update = {}
+
+    for arg in argv:
+        split_arg = arg.split("=")
+        if len(split_arg) != 2:
+            fuck_off()
+
+        properties_to_update[split_arg[0]] = split_arg[1]
+
+    content_manager.update_properties(properties_to_update)
+
 def generate(content_manager, argv):
     content_manager.hydrate_templates()
 
@@ -390,12 +419,14 @@ def main(argv):
     action = argv[1]
 
     app_dir = dirname(os.path.realpath(__file__))
-    content_manager = ContentManager(app_dir = app_dir, host = host)
+    content_manager = ContentManager(app_dir=app_dir, host=host)
 
     if action == "create":
         create(content_manager, argv[2:])
     elif action == "delete":
         delete(content_manager, argv[2:])
+    elif action == "update_properties":
+        update_properties(content_manager, argv[2:])
     elif action == "generate":
         generate(content_manager, argv[2:])
     elif action == "push":
@@ -409,6 +440,7 @@ def fuck_off():
     usage  = "Usage:\n"
     usage += "    python3 content_manager.py <host> create <text | image | video> <content_file_path>\n"
     usage += "    python3 content_manager.py <host> delete <post_id | post_url>\n"
+    usage += "    python3 content_manager.py <host> update_properties <property=\"value\"> ...\n"
     usage += "    python3 content_manager.py <host> generate\n"
     usage += "    python3 content_manager.py <host> push\n"
     usage += "    python3 content_manager.py <host> pull\n"
